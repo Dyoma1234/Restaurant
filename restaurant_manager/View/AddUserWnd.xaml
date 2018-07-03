@@ -7,7 +7,8 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:domain="clr-namespace:restaurant_manager.domain"
         mc:Ignorable="d"
-        Title="Добавить нового сотрудника" Height="550" Width="500"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        Title="Добавить нового сотрудника" Height="480" Width="380"
            TextElement.Foreground="{DynamicResource MaterialDesignBody}"
      TextElement.FontWeight="Regular"
      TextElement.FontSize="13"
@@ -15,7 +16,7 @@
      TextOptions.TextRenderingMode="Auto"
         x:Name="wnd"
      Background="{DynamicResource MaterialDesignPaper}"
-     FontFamily="{DynamicResource MaterialDesignFont}" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+     FontFamily="{DynamicResource MaterialDesignFont}" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Icon="/restaurant_manager;component/chef.png">
     
     <Grid Margin="40,0">
         <Grid.ColumnDefinitions>
@@ -33,7 +34,7 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Имя">
+        <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Имя" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4">
             <TextBox.Text>
                 <Binding Path="Name" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
                     <Binding.ValidationRules>
@@ -42,7 +43,7 @@
                 </Binding>
             </TextBox.Text>
         </TextBox>
-        <TextBox Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Фамилия">
+        <TextBox Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Фамилия" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4">
             <TextBox.Text>
                 <Binding Path="Surname" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
                     <Binding.ValidationRules>
@@ -51,24 +52,32 @@
                 </Binding>
             </TextBox.Text>
         </TextBox>
-        <ComboBox Grid.Row="2" materialDesign:HintAssist.Hint="Должность"
+        <ComboBox Grid.Row="2" materialDesign:HintAssist.Hint="Должность" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4"
   Style="{StaticResource MaterialDesignFloatingHintComboBox}"  Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Bottom"
                                   ItemsSource="{Binding Path=Pos}"
                                   SelectedItem="{Binding Path=Cur_pos}"
                                   DisplayMemberPath="Position" 
                                   SelectedValuePath="Position">
-            
-        </ComboBox>
-        <TextBox Grid.Row="3"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Телефон">
-            <TextBox.Text>
-                <Binding Path="Phone" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
+            <ComboBox.Text>
+                <Binding Path="Cur_posStr" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
                     <Binding.ValidationRules>
                         <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
                     </Binding.ValidationRules>
                 </Binding>
+            </ComboBox.Text>
+        </ComboBox>
+        <TextBox Grid.Row="3"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Телефон" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4">
+            <TextBox.Text>
+                <Binding Path="Phone" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
+                    <Binding.ValidationRules>
+                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                        <domain:PhoneNumberValidation ValidatesOnTargetUpdated="True"/>
+
+                    </Binding.ValidationRules>
+                </Binding>
             </TextBox.Text>
         </TextBox>
-        <TextBox Grid.Row="4"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Логин">
+        <TextBox Grid.Row="4"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Логин" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4">
             <TextBox.Text>
                 <Binding Path="Login" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
                     <Binding.ValidationRules>
@@ -77,26 +86,22 @@
                 </Binding>
             </TextBox.Text>
         </TextBox>
-        <TextBox Grid.Row="5"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Пароль">
-            <TextBox.Text>
-                <Binding Path="Password_f" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
-                    <Binding.ValidationRules>
-                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
-                    </Binding.ValidationRules>
-                </Binding>
-            </TextBox.Text>
-        </TextBox>
-        <TextBox Grid.Row="6"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Повторить пароль">
-            <TextBox.Text>
-                <Binding Path="Password_s" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-                    <Binding.ValidationRules>
-                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
-                    </Binding.ValidationRules>
-                </Binding>
-            </TextBox.Text>
-        </TextBox>
-        <Button Grid.Row="7" Grid.Column="1" Margin="15 10"  Command="{Binding AddNewUserCommand}" CommandParameter="{Binding ElementName=wnd}" >Сохранить</Button>
-        <Button Grid.Row="7" Grid.Column="0" Margin="15 10" Click="Button_Click"  >Отмена</Button>
+        <PasswordBox x:Name="Fpwb" Grid.Row="5"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Пароль" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="PasswordChanged">
+                    <i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{Binding ElementName=wnd}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </PasswordBox>
+        <PasswordBox x:Name="Spwb" Grid.Row="6"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Повторить пароль" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="PasswordChanged">
+                    <i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{Binding ElementName=wnd}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </PasswordBox>
+        <Button Grid.Row="7" Grid.Column="0" Margin="15,10"  Command="{Binding AddNewUserCommand}" CommandParameter="{Binding ElementName=wnd}" >Сохранить</Button>
+        <Button Grid.Row="7" Grid.Column="1" Margin="15, 10" Click="Button_Click"  >Отмена</Button>
 
     </Grid>
 </Window>

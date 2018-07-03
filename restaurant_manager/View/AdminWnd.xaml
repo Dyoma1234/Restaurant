@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:restaurant_manager"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:c="clr-namespace:restaurant_manager.ViewModel"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
      TextElement.FontWeight="Regular"
@@ -15,70 +14,133 @@
      Background="{DynamicResource MaterialDesignPaper}"
      FontFamily="{DynamicResource MaterialDesignFont}" 
         Name="Mwnd"
-    Title="AdminWnd" Height="600" Width="860"  WindowStartupLocation="CenterScreen">
+    Title="Главное окно" Height="600" Width="860" MinHeight="600" MinWidth="860" WindowStartupLocation="CenterScreen" Icon="/restaurant_manager;component/chef.png">
 
 
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+
+        <Storyboard x:Key="SearchMenuOpen">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="SearchPanel">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="60"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="SearchMenuClose">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="SearchPanel">
+                <EasingDoubleKeyFrame KeyTime="0" Value="60"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
        
-        <c:AdminViewModel x:Key="AdminViewSource"/>
+
+
+
         <Storyboard x:Key="MenuOpen">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
                 <EasingDoubleKeyFrame KeyTime="0" Value="60"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="200"/>
             </DoubleAnimationUsingKeyFrames>
-
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="bg">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0" Value="1920"/>
+            </DoubleAnimationUsingKeyFrames>
         </Storyboard>
+
         <Storyboard x:Key="MenuClose">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
                 <EasingDoubleKeyFrame KeyTime="0" Value="200"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="60"/>
             </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="bg">
+                <EasingDoubleKeyFrame KeyTime="0" Value="1920"/>
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
         </Storyboard>
+
     </Window.Resources>
     <Window.Triggers>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="BtnOpenSearch">
+            <BeginStoryboard Storyboard="{StaticResource SearchMenuOpen}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="BtnCloseSearch">
+            <BeginStoryboard Storyboard="{StaticResource SearchMenuClose}"/>
+        </EventTrigger>
+       
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="BtnOpenMenu">
             <BeginStoryboard Storyboard="{StaticResource MenuOpen}"/>
         </EventTrigger>
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="BtnCloseMenu">
             <BeginStoryboard Storyboard="{StaticResource MenuClose}"/>
         </EventTrigger>
+        <EventTrigger RoutedEvent="MouseDown" SourceName="bg">
+            <BeginStoryboard Storyboard="{StaticResource MenuClose}"/>
+        </EventTrigger>
     </Window.Triggers>
     <Grid>
-        <Grid></Grid>
         <Grid x:Name="Content" Margin="60,50,0,0" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="111*"/>
-                <RowDefinition Height="139*"/>
+                <RowDefinition />
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="559*"/>
-                <ColumnDefinition Width="186*"/>
-                <ColumnDefinition Width="1109*"/>
+                <ColumnDefinition />
+                <ColumnDefinition/>
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="3" Margin="0,0,-0.4,0.4" Grid.RowSpan="2">
-               
-                    <WrapPanel x:Name="Ctn_main"   Orientation="Horizontal" VerticalAlignment="Top">
-                   
-                    </WrapPanel>
-                   
-               
+
+            <Grid Grid.RowSpan="2" Grid.ColumnSpan="3" x:Name="bkk"></Grid>
+            <Grid x:Name="Table_content" Grid.ColumnSpan="3" Grid.RowSpan="2">
+
+
+
+            </Grid>
+            <Grid Background="White"  x:Name="SearchPanel" Grid.ColumnSpan="3" Grid.RowSpan="2"  VerticalAlignment="Top" 
+                    Height="0">
+            </Grid>
+
+            
+                <ScrollViewer x:Name="User_container" Visibility="Collapsed" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="3" Margin="0,0,-0.4,0.4" Grid.RowSpan="2">
+
+                <WrapPanel x:Name="Users_content"    Orientation="Horizontal">
+                </WrapPanel>
+
             </ScrollViewer>
+            
+        <Grid  x:Name="HelperBtn" Visibility="Collapsed" Grid.ColumnSpan="3" Grid.RowSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,50,50">
+            </Grid>
         </Grid>
+        <Grid x:Name="BgContent" Visibility="Collapsed" Background="Black" Opacity="0.4" Grid.ColumnSpan="3" Grid.RowSpan="3"/>
 
         <Grid x:Name="Nav" Height="50" Background="#FF2196F3"   VerticalAlignment="Top" >
 
 
             <!--  <ToggleButton Style="{DynamicResource MaterialDesignHamburgerToggleButton}" Foreground="White" />
           -->
-            <TextBlock Text="{Binding PageName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Source={StaticResource AdminViewSource}}" Width="auto" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Brush Script Std" TextDecorations="{x:Null}" FontWeight="Bold" FontStyle="Italic"/>
-         
+            <TextBlock  Text="{Binding PageName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="auto" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Brush Script Std" TextDecorations="{x:Null}" FontWeight="Bold" FontStyle="Italic"/>
+            <Grid x:Name="SearchBtn" Visibility="Visible" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="25,0">
+            <Button x:Name="BtnOpenSearch"  Background="{x:Null}" BorderBrush="{x:Null}" Click="BtnOpenSearchMenu_Click">
+                <materialDesign:PackIcon Foreground="White" Kind="ArrowDownThick"/>
+            </Button>
+            <Button Visibility="Collapsed" x:Name="BtnCloseSearch"   Background="{x:Null}" BorderBrush="{x:Null}" Click="BtnCloseSearchMenu_Click">
+                <materialDesign:PackIcon Foreground="White" Kind="ArrowUpThick"/>
+            </Button>
+            </Grid>
            
+        </Grid>
+        <Grid x:Name="bg" Opacity="0.4"  Background="Black" Width="0" MouseDown="bg_MouseDown"></Grid>
+        <Grid x:Name="LoadLogin" Visibility="Collapsed">
+            <Grid Background="Black" Opacity="0.4"></Grid>
+            <ProgressBar Width="50" Height="50"
+                        Style="{StaticResource MaterialDesignCircularProgressBar}"
+                        Value="0"
+                         IsIndeterminate="True" />
         </Grid>
         <Grid x:Name="GridMenu" Width="60" HorizontalAlignment="Left" Background="#1976d2">
             <StackPanel>
                 <Grid Height="90" Background="White">
-                    <TextBlock x:Name="FullName" VerticalAlignment="Bottom" Margin="10 20" Text="{Binding Path=FullName, UpdateSourceTrigger=PropertyChanged , Mode=TwoWay, Source={StaticResource AdminViewSource}}"   Foreground="#1976d2" FontWeight="Bold" Visibility="Collapsed"></TextBlock>
-                    <TextBlock x:Name="PhoneNumber" VerticalAlignment="Bottom" Margin="10 5" Text="{Binding Path=PhoneNumber, UpdateSourceTrigger=PropertyChanged , Mode=TwoWay, Source={StaticResource AdminViewSource}}"   Foreground="#1976d2" Visibility="Collapsed"></TextBlock>
+                    <TextBlock x:Name="FullName" VerticalAlignment="Bottom" Margin="10 20" Text="{Binding Path=FullName, UpdateSourceTrigger=PropertyChanged , Mode=TwoWay}"   Foreground="#1976d2" FontWeight="Bold" Visibility="Collapsed"></TextBlock>
+                    <TextBlock x:Name="PhoneNumber" VerticalAlignment="Bottom" Margin="10 5" Text="{Binding Path=PhoneNumber, UpdateSourceTrigger=PropertyChanged , Mode=TwoWay}"   Foreground="#1976d2" Visibility="Collapsed"></TextBlock>
 
                     <Button x:Name="BtnCloseMenu" VerticalAlignment="Top" HorizontalAlignment="Right" Width="60" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Visibility="Collapsed" Click="BtnCloseMenu_Click">
                         <materialDesign:PackIcon Kind="ArrowLeft" Foreground="#1976d2"/>
@@ -88,13 +150,20 @@
                     </Button>
                 </Grid>
                 <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="White">
+                    
                     <ListViewItem Height="60">
+                        <ListViewItem.InputBindings>
+                            <MouseBinding Command="{Binding ShowBookingCommand}" CommandParameter="{Binding ElementName=Mwnd}" MouseAction="LeftClick" />
+                        </ListViewItem.InputBindings>
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Home" Margin="10" VerticalAlignment="Center" Height="25" Width="25" />
                             <TextBlock Text="Зал" VerticalAlignment="Center" Margin="20 10" TextDecorations="{x:Null}"/>
                         </StackPanel>
                     </ListViewItem>
                     <ListViewItem Height="60">
+                        <ListViewItem.InputBindings>
+                            <MouseBinding Command="{Binding ShowMenuCommand}" CommandParameter="{Binding ElementName=Mwnd}" MouseAction="LeftClick" />
+                        </ListViewItem.InputBindings>
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="BookOpenVariant" Margin="10" VerticalAlignment="Center" Height="25" Width="25" />
                             <TextBlock Text="Меню" VerticalAlignment="Center" Margin="20 10" TextDecorations="{x:Null}"/>
@@ -102,7 +171,7 @@
                     </ListViewItem>
                     <ListViewItem Height="60" >
                         <ListViewItem.InputBindings>
-                            <MouseBinding Command="{Binding ShowPersonalCommand, Source={StaticResource AdminViewSource}}" CommandParameter="{Binding ElementName=Mwnd}" MouseAction="LeftClick" />
+                            <MouseBinding Command="{Binding ShowPersonalCommand}" CommandParameter="{Binding ElementName=Mwnd}" MouseAction="LeftClick" />
                         </ListViewItem.InputBindings>
                         <StackPanel Orientation="Horizontal" >
                             <materialDesign:PackIcon Kind="Account" Margin="10" VerticalAlignment="Center" Height="25" Width="25" />
@@ -111,17 +180,29 @@
                         </StackPanel>
                     </ListViewItem>
                     <ListViewItem Height="60">
+                        <ListViewItem.InputBindings>
+                            <MouseBinding Command="{Binding ShowStorageCommand}" CommandParameter="{Binding ElementName=Mwnd}" MouseAction="LeftClick" />
+                        </ListViewItem.InputBindings>
                         <StackPanel Orientation="Horizontal" >
                             <materialDesign:PackIcon Kind="Store" Margin="10" VerticalAlignment="Center" Height="25" Width="25"  />
                             <TextBlock  Text="Склад" VerticalAlignment="Center" Margin="20 10" TextDecorations="{x:Null}"/>
                         </StackPanel>
                     </ListViewItem>
-
+                    <ListViewItem Height="60" >
+                        <ListViewItem.InputBindings>
+                            <MouseBinding Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=Mwnd}" MouseAction="LeftClick" />
+                        </ListViewItem.InputBindings>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Close" Margin="10" VerticalAlignment="Center" Height="25" Width="25" />
+                            <TextBlock Text="Выход" VerticalAlignment="Center" Margin="20 10" TextDecorations="{x:Null}"/>
+                        </StackPanel>
+                    </ListViewItem>
                 </ListView>
             </StackPanel>
 
         </Grid>
 
+        <Grid x:Name="MainBG" Opacity="0.4" Background="Black" Visibility="Collapsed"></Grid>
     </Grid>
 
 

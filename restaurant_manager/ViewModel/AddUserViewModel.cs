@@ -5,6 +5,8 @@ using System.Text;
 using System.Windows.Input;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
+using System.Windows;
 using restaurant_manager.Interfaces;
 namespace restaurant_manager.ViewModel
 {
@@ -19,9 +21,13 @@ namespace restaurant_manager.ViewModel
         private string _login;
         private string _password_f;
         private string _password_s;
-
+        private string _cur_posstr;
+        public Staff_Pos _cur_pos;
         public List<Staff_Pos> Pos { set; get; }
-        public Staff_Pos Cur_pos { set; get; }
+        public Staff_Pos Cur_pos { set { _cur_pos = value; OnPropertyChanged(new PropertyChangedEventArgs("Cur_pos")); } get => _cur_pos; }
+        public string Cur_posStr { set { _cur_posstr = value; OnPropertyChanged(new PropertyChangedEventArgs("Cur_posStr")); } get => _cur_posstr; }
+        private HashingPassword hashing;
+
 
         public string Name
         {
@@ -127,22 +133,28 @@ namespace restaurant_manager.ViewModel
 
         private bool CanAddUser(object obj)
         {
-            if (_name == string.Empty||
-                _surname == string.Empty ||
-                _email == string.Empty ||
-                _phone == string.Empty ||
-                _login == string.Empty ||
-                _password_f == string.Empty ||
-                _password_s == string.Empty ||
-                Cur_pos == null )
-            {
+            if (string.IsNullOrWhiteSpace(_name))
                 return false;
-            }
-            else if (_password_f != _password_s)
-            {
+            if (string.IsNullOrWhiteSpace(_surname))
                 return false;
-            }
-
+            if (string.IsNullOrWhiteSpace(_phone))
+                return false;
+            if (string.IsNullOrWhiteSpace(_login))
+                return false;
+            if (string.IsNullOrWhiteSpace(_password_f))
+                return false;
+            if (string.IsNullOrWhiteSpace(_password_s))
+                return false;
+            if (string.IsNullOrWhiteSpace(_cur_posstr))
+                return false;
+            if (_password_f.Count()<4|| _password_f.Count()>16)
+                return false;
+            if (_password_s.Count() < 4 || _password_s.Count() > 16)
+                return false;
+            if (_login.Count() < 4 || _login.Count() > 16)
+                return false;
+            if (_password_f != _password_s)
+                return false;
             return true;
         }
 
@@ -157,32 +169,27 @@ namespace restaurant_manager.ViewModel
                 temp.FirstName = _name;
                 temp.LastName = _surname;
                 temp.login = _login;
-                temp.password = _password_f;
+                temp.password = hashing.HashPassword(Password_f);
                 temp.phone_number = _phone;
                 temp.Staff_Pos = Cur_pos;
                 temp.Staff_PosId = Cur_pos.Id;
                 _model.db.StaffSet.Add(temp);
                 await _model.db.SaveChangesAsync();
-                Imsg sender = obj as Imsg;
-                if (sender == null)
-                    return;
+                WpfMessageBox.Show("Добавить нового сотрудника", "Новый пользователь добавлен!", MessageBoxButton.OK, MessageBoxImage.Warning);
 
-                sender.ShowInfo("Новый пользователь добавлен!", "Добавить нового сотрудника");
                 find = _model.db.StaffSet.Where(Staff => Staff.login == _login)
                     .FirstOrDefault();
                 if (find != null)
                 {
-                    createUser.AddUser(find.Id, find.FirstName, find.LastName, find.login, find.password);
+                    createUser.AddUser(find.Id);
                 }
                 clear();
             }
             else
             {
-                Imsg sender = obj as Imsg;
-                if (sender == null)
-                    return;
+                
 
-                sender.ShowWarning("Пользователь с таким логином уже существует", "Добавить нового сотрудника");
+                WpfMessageBox.Show( "Добавить нового сотрудника", "Пользователь с таким логином уже существует",MessageBoxButton.OK,MessageBoxImage.Warning);
             }
 
         }
@@ -202,6 +209,7 @@ namespace restaurant_manager.ViewModel
             _model = new Model();
             Pos = _model.db.Staff_PosSet.ToList();
             Cur_pos = null;
+            hashing = new HashingPassword();
         }
         public AddUserViewModel(ICreateUserList cul)
         {
@@ -209,6 +217,34 @@ namespace restaurant_manager.ViewModel
             Pos = _model.db.Staff_PosSet.ToList();
             Cur_pos = null;
             createUser = cul;
+            hashing = new HashingPassword();
+
+        }
+
+
+        private DelegateCommand _PasswordChangedCommand;
+
+        public ICommand PasswordChangedCommand
+        {
+            get
+            {
+                if (_PasswordChangedCommand == null)
+                {
+                    _PasswordChangedCommand = new DelegateCommand(FPChanget, null);
+                }
+                return _PasswordChangedCommand;
+            }
+        }
+
+        private void FPChanget(object obj)
+        {
+            IPasswordChanget item = (obj as IPasswordChanget);
+            if (item == null)
+                return;
+            Password_f = item.GetPassword_F();
+            Password_s= item.GetPassword_S();
+
+
         }
     }
 }

@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using restaurant_manager.ViewModel;
 namespace restaurant_manager
 {
     /// <summary>
@@ -23,11 +23,15 @@ namespace restaurant_manager
         public LoginWnd()
         {
             InitializeComponent();
+            LoginViewModel vm = new LoginViewModel();
+            DataContext = vm;
         }
 
         public string GetPassword()
         {
             return PasswordBox.Password;
         }
+
+       
     }
 }

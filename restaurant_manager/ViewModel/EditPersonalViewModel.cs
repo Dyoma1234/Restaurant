@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-
+using System.Windows;
+using System.ComponentModel;
 
 namespace restaurant_manager.ViewModel
 {
@@ -18,7 +19,13 @@ namespace restaurant_manager.ViewModel
         private string _fullname;
         private string _login;
         private string _password;
+        private string _secretword;
+        private string _p1;
+        private string _p2;
+        private string _cur_secretword;
         public int Id { set; get; }
+        private HashingPassword hashing;
+
 
 
         private string old_name;
@@ -28,11 +35,12 @@ namespace restaurant_manager.ViewModel
         private string old_fullname;
         private string old_login;
         private string old_password;
+        private bool _resetvis;
 
-        
+
         public List<Staff_Pos> staff_Pos { set; get; }
-        public Staff_Pos Cur_pos { set; get; } 
-         
+        public Staff_Pos Cur_pos { set; get; }
+        public event EventHandler DelVis;
         public string Name
         {
             get
@@ -75,7 +83,18 @@ namespace restaurant_manager.ViewModel
                 OnPropertyChanged(new System.ComponentModel.PropertyChangedEventArgs("FullName"));
             }
         }
-
+        public string SecretWord
+        {
+            set
+            {
+                _secretword = value;
+                OnPropertyChanged(new System.ComponentModel.PropertyChangedEventArgs("SecretWord"));
+            }
+            get
+            {
+                return _secretword;
+            }
+        }
         public string Phone
         {
             get
@@ -125,39 +144,65 @@ namespace restaurant_manager.ViewModel
                 OnPropertyChanged(new System.ComponentModel.PropertyChangedEventArgs("Password"));
             }
         }
+        public bool ResetVis
+        {
+            set
+            {
+                _resetvis = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("ResetVis"));
+            }
+            get
+            {
+                return _resetvis;
+            }
+        }
+
+        public event EventHandler DelUserEvent;
+
         public EditPersonalViewModel()
         {
          _model = new Model();
-         old_name=_name;
+            ResetVis = false;
+            _p1 = string.Empty;
+            _p2 = string.Empty;
+         old_name =_name;
          old_lastname = _lastname;
          old_phone = _phone;
          old_pos = _pos;
          old_fullname = _fullname;
+            hashing = new HashingPassword();
 
 
-
-        FullName = (_name +" "+ _lastname);
+           FullName = (_name +" "+ _lastname);
         }
         public EditPersonalViewModel(int id)
         {
             
             _model = new Model();
+            ResetVis = false;
+
+            _p1 = string.Empty;
+            _p2 = string.Empty;
+            hashing = new HashingPassword();
             Id = id;
-            foreach (var item in _model.db.StaffSet)
+            Staff item = _model.db.StaffSet.Find(Id);
+
+            if (item.Id == Id) 
             {
-                if (item.Id == Id)
-                {
-                    _name = item.FirstName;
-                    _lastname = item.LastName;
-                    _phone = item.phone_number;
-                    _login = item.login;
-                    _password = item.password;
-                    Cur_pos = item.Staff_Pos;
-                    _pos = item.Staff_Pos.Position;
-                }
+
+                _name = item.FirstName;
+                _lastname = item.LastName;
+                _phone = item.phone_number;
+                _login = item.login;
+                _password = item.password;
+                Cur_pos = item.Staff_Pos;
+                _pos = item.Staff_Pos.Position;
+                _cur_secretword = item.secret_word;
+                
             }
 
-            old_name = _name;
+
+    old_name = _name;
             old_lastname = _lastname;
             old_phone = _phone;
             old_pos = _pos;
@@ -172,7 +217,7 @@ namespace restaurant_manager.ViewModel
         }
 
         private DelegateCommand _save_command;
-
+        private DelegateCommand _deluser_command;
 
         public ICommand SaveCommand
         {
@@ -187,6 +232,55 @@ namespace restaurant_manager.ViewModel
             }
         }
 
+        public ICommand DelUserCommand
+        {
+            get
+            {
+                if (_deluser_command == null)
+                {
+                    _deluser_command = new DelegateCommand(DelPersonal, CanDelPersonal);
+
+                }
+                return _deluser_command;
+            }
+        }
+
+        private bool CanDelPersonal(object obj)
+        {
+            if (obj != null)
+            {
+                int search_id = (int)obj;
+                if (search_id == Cur_session.Id)
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private async void DelPersonal(object obj)
+        {
+            if (obj != null)
+            {
+                
+                    int search_id = (int)obj;
+                    var remove = _model.db.StaffSet.Find(search_id);
+                    if (remove == null)
+                        return;
+
+                DelVis?.Invoke(obj, null);
+                if (MessageBoxResult.Yes==WpfMessageBox.Show("Удаление персонала", "Вы действительно хотите удалить \""+remove.FirstName+" "+remove.LastName+"\" ?",MessageBoxButton.YesNo,MessageBoxImage.Warning))
+                {
+                    DelVis?.Invoke(obj, null);
+                    _model.db.StaffSet.Remove(remove);
+                    await _model.db.SaveChangesAsync();
+                    DelUserEvent?.Invoke(null, null);
+                    return;
+                }
+                DelVis?.Invoke(obj, null);
+            }
+        }
         private bool CanSaveNewPropertys(object obj)
         {
             if (old_name != _name ||
@@ -214,37 +308,146 @@ namespace restaurant_manager.ViewModel
 
         private async   void SaveNewPropertys(object obj)
         {
-            foreach (var item in _model.db.StaffSet)
+            DelVis?.Invoke(obj, null);
+            if (MessageBoxResult.Yes == WpfMessageBox.Show("Редактирование персонала", "Вы действительно хотите сохранить редактирование ?", MessageBoxButton.YesNo, MessageBoxImage.Warning))
             {
-                if (item.Id == Id)
+                foreach (var item in _model.db.StaffSet)
                 {
+                    if (item.Id == Id)
+                    {
 
 
-                    item.FirstName = Name;
+                        item.FirstName = Name;
 
-                    item.LastName = _lastname;
+                        item.LastName = _lastname;
 
-                    item.login = Login;
+                        item.login = Login;
 
-                    item.password = Password;
+                        item.password = Password;
 
-                    item.phone_number = Phone;
+                        item.phone_number = Phone;
 
-                    item.Staff_Pos = Cur_pos;
+                        item.Staff_Pos = Cur_pos;
 
 
-                    old_name = _name;
-                    old_lastname = _lastname;
-                    old_phone = _phone;
-                    old_pos = Cur_pos.Position;
-                    old_fullname = _fullname;
-                    old_login = _login;
-                    old_password = _password;
+                        old_name = _name;
+                        old_lastname = _lastname;
+                        old_phone = _phone;
+                        old_pos = Cur_pos.Position;
+                        old_fullname = _fullname;
+                        old_login = _login;
+                        old_password = _password;
 
-                    break;
+                        break;
+                    }
                 }
+                await _model.db.SaveChangesAsync();
             }
-         await   _model.db.SaveChangesAsync();
+            DelVis?.Invoke(obj, null);
+
+        }
+        private DelegateCommand _PasswordChangedCommand;
+        private DelegateCommand _reset_command;
+        private DelegateCommand _ShowResetCommand;
+
+        public ICommand ShowResetCommand
+        {
+            get
+            {
+                if (_ShowResetCommand == null)
+                {
+                     _ShowResetCommand=new DelegateCommand(OpenReset,null);
+                }
+                return _ShowResetCommand;
+            }
+        }
+
+        private void OpenReset(object obj)
+        {
+            ResetVis = true;
+        }
+
+        public ICommand PasswordChangedCommand
+        {
+            get
+            {
+                if (_PasswordChangedCommand == null)
+                {
+                    _PasswordChangedCommand = new DelegateCommand(FpChanget, CanFpChanget);
+                }
+                return _PasswordChangedCommand;
+            }
+        }
+
+        private bool CanFpChanget(object obj)
+        {
+            return true;
+        }
+
+        public ICommand ResetCommand
+        {
+            get
+            {
+                if (_reset_command == null)
+                {
+                    _reset_command = new DelegateCommand(Reset, CanReset);
+                }
+                return _reset_command;
+            }
+            
+        }
+
+        private bool CanReset(object obj)
+        {
+            if (string.IsNullOrWhiteSpace(_secretword))
+                return false;
+            if (string.IsNullOrWhiteSpace(_p1))
+                return false;
+            if (string.IsNullOrWhiteSpace(_p2))
+                return false;
+            if (_p1 != _p2)
+                return false;
+
+            return true;
+        }
+
+        private void Reset(object obj)
+        {
+            var UserReset = _model.db.StaffSet.Where(i => i.Id == Id).FirstOrDefault();
+            if (UserReset == null)
+                return;
+            if (UserReset.secret_word == SecretWord)
+            {
+                _model.db.StaffSet.Remove(UserReset);
+                _model.db.SaveChanges();
+                UserReset.password = hashing.HashPassword(_p1);
+                _model.db.StaffSet.Add(UserReset);
+                _model.db.SaveChanges();
+                _p1 = string.Empty;
+                _p2 = string.Empty;
+                SecretWord = string.Empty;
+                DelVis?.Invoke(obj, null);
+                WpfMessageBox.Show("Изменение пароля", "Пароль успешно изменен.", MessageBoxType.Information);
+                DelVis?.Invoke(obj, null);
+                ResetVis = false;
+            }
+            else
+            {
+                DelVis?.Invoke(obj, null);
+                WpfMessageBox.Show("Изменение пароля", "Секретное слово неправильное.", MessageBoxType.Information);
+                DelVis?.Invoke(obj, null);
+            }
+
+        }
+
+        private void FpChanget(object obj)
+            {
+            IPasswordChanget item = (obj as IPasswordChanget);
+            if (item == null)
+                return;
+            _p1 = item.GetPassword_F();
+            _p2 = item.GetPassword_S();
+
 
         }
     }

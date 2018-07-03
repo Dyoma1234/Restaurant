@@ -14,10 +14,19 @@ namespace restaurant_manager
     
     public partial class Tables
     {
-        public int Id { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Tables()
+        {
+            this.Order_Dishes = new HashSet<Order_Dishes>();
+            this.ReservationSet = new HashSet<Reservation>();
+        }
     
-        public virtual Reservation Reservation { get; set; }
-        public virtual Order_Dishes Order_Dishes { get; set; }
-        public virtual Сheck Сheck { get; set; }
+        public int Id { get; set; }
+        public Nullable<int> Num { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Order_Dishes> Order_Dishes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Reservation> ReservationSet { get; set; }
     }
 }

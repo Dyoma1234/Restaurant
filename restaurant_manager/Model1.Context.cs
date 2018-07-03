@@ -28,8 +28,6 @@ namespace restaurant_manager
         public virtual DbSet<Product> ProductSet { get; set; }
         public virtual DbSet<Product_category> Product_categorySet { get; set; }
         public virtual DbSet<Dishes> DishesSet { get; set; }
-        public virtual DbSet<Сheck> СheckSet { get; set; }
-        public virtual DbSet<Tables> TablesSet { get; set; }
         public virtual DbSet<Guests> GuestsSet { get; set; }
         public virtual DbSet<Reservation> ReservationSet { get; set; }
         public virtual DbSet<Staff_Pos> Staff_PosSet { get; set; }
@@ -37,5 +35,8 @@ namespace restaurant_manager
         public virtual DbSet<Order_Dishes> Order_DishesSet { get; set; }
         public virtual DbSet<Ready_Dishes> Ready_DishesSet { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<Dishes_categories> Dishes_categoriesSet { get; set; }
+        public virtual DbSet<Formula> FormulaSet { get; set; }
+        public virtual DbSet<Tables> TablesSet { get; set; }
     }
 }

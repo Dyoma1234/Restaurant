@@ -21,6 +21,7 @@ namespace restaurant_manager
         public string password { get; set; }
         public int Staff_PosId { get; set; }
         public string phone_number { get; set; }
+        public string secret_word { get; set; }
     
         public virtual Staff_Pos Staff_Pos { get; set; }
     }

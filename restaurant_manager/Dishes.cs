@@ -17,18 +17,24 @@ namespace restaurant_manager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Dishes()
         {
-            this.Product = new HashSet<Product>();
+            this.Formula = new HashSet<Formula>();
+            this.Order_Dishes = new HashSet<Order_Dishes>();
+            this.ProductSet = new HashSet<Product>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
         public string Price { get; set; }
-        public int СheckId { get; set; }
-        public int Order_DishesId { get; set; }
+        public int Dishes_categoriesId { get; set; }
+        public string Weight { get; set; }
+        public Nullable<bool> IsSelected { get; set; }
     
+        public virtual Dishes_categories Dishes_categories { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Product> Product { get; set; }
-        public virtual Сheck Сheck { get; set; }
-        public virtual Order_Dishes Order_Dishes { get; set; }
+        public virtual ICollection<Formula> Formula { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Order_Dishes> Order_Dishes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Product> ProductSet { get; set; }
     }
 }

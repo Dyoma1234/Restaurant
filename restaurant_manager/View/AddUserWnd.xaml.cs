@@ -20,7 +20,7 @@ namespace restaurant_manager
     /// <summary>
     /// Логика взаимодействия для AddUserWnd.xaml
     /// </summary>
-    public partial class AddUserWnd : Window ,Imsg
+    public partial class AddUserWnd : Window , IPasswordChanget
     {
      
         public AddUserWnd()
@@ -34,14 +34,25 @@ namespace restaurant_manager
             DataContext = new AddUserViewModel(cul);
           
         }
+
+        public string GetPassword_F()
+        {
+            return Fpwb.Password;
+        }
+
+        public string GetPassword_S()
+        {
+            return Spwb.Password;
+        }
+
         public void ShowInfo(string msg,string cap)
         {
-            System.Windows.MessageBox.Show(this, msg, cap, MessageBoxButton.OK, MessageBoxImage.Information);
+            System.Windows.MessageBox.Show(this, msg, cap, System.Windows.MessageBoxButton.OK,System.Windows.MessageBoxImage.Information);
         }
 
         public void ShowWarning(string msg,string cap)
         {
-            System.Windows.MessageBox.Show(this, msg, cap, MessageBoxButton.OK, MessageBoxImage.Warning);
+            System.Windows.MessageBox.Show(this, msg, cap, System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

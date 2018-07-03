@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="restaurant_manager.UserTable"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:restaurant_manager"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+               TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+     TextElement.FontWeight="Regular"
+     TextElement.FontSize="13"
+     TextOptions.TextFormattingMode="Ideal"
+     TextOptions.TextRenderingMode="Auto"
+     Background="{DynamicResource MaterialDesignPaper}"
+     FontFamily="{DynamicResource MaterialDesignFont}" >
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <DataGrid
+            x:Name="Table"
+  Margin="0 8 0 0"
+  ItemsSource="{Binding ListProduct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+  CanUserSortColumns="True"
+  CanUserAddRows="{Binding AddNew, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+  AutoGenerateColumns="False"
+  materialDesign:DataGridAssist.CellPadding="13 8 8 8"
+  materialDesign:DataGridAssist.ColumnHeaderPadding="8">
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn
+                                 Binding="{Binding IsSelected}"
+                                     EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">
+                    <DataGridCheckBoxColumn.Header>
+                        <!--padding to allow hit test to pass thru for sorting -->
+                        <Border
+                                     Background="Transparent"
+                                     Padding="6 0 6 0"
+                                     HorizontalAlignment="Center">
+                            <CheckBox
+                                         HorizontalAlignment="Center"
+                                         DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext}"
+                                         IsChecked="{Binding IsAllItems3Selected}" />
+                        </Border>
+                    </DataGridCheckBoxColumn.Header>
+                </DataGridCheckBoxColumn>
+                <DataGridTextColumn
+                    IsReadOnly="True"
+                              Binding="{Binding Id}"
+                              Header="Номер"
+                              EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+                <!-- if you want to use the pop up style (MaterialDesignDataGridTextColumnPopupEditingStyle), you must use MaterialDataGridTextColumn -->
+                <materialDesign:MaterialDataGridTextColumn
+                    IsReadOnly="{Binding Editmode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Binding="{Binding Name}"
+                             Header="Название"
+                             MaxLength="50"
+                             EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}" />
+                <materialDesign:MaterialDataGridComboBoxColumn
+                  materialDesign:DataGridAssist.EnableEditBoxAssist="{Binding Editmode ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 Header="Категория"
+                 SelectedValueBinding="{Binding Product_category}"
+                 ItemsSourceBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.ListProductCategory}" 
+                 DisplayMemberPath="Name" />
+                <!-- set a max length to get an indicator in the editor -->
+                <materialDesign:MaterialDataGridTextColumn
+                            IsReadOnly="{Binding Editmode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Binding="{Binding count}"
+                             Header="Количесто"
+                             MaxLength="50"
+                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}" />
+                <materialDesign:MaterialDataGridTextColumn
+                             IsReadOnly="{Binding Editmode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Binding="{Binding Unit}"
+                             Header="Единицы"
+                             MaxLength="50"
+                             EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                    
+                </materialDesign:MaterialDataGridTextColumn>
+                <!-- use custom combo box column to get better combos. Use ItemsSourceBinding as your binding template to be applied to each combo -->
+            </DataGrid.Columns>
+        </DataGrid>
+        <Grid Visibility="{Binding Path=NotFound, Converter={StaticResource BoolToVisConverter}}">
+            <TextBlock FontSize="72" HorizontalAlignment="Center" VerticalAlignment="Center">Ничего не найдено :(</TextBlock>
+        </Grid>
+        <Grid Background="Black" Opacity="0.4" Visibility="{Binding Path=TableVisible, Converter={StaticResource BoolToVisConverter} }"></Grid>
+    </Grid>
+</UserControl>

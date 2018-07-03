@@ -8,13 +8,12 @@ namespace restaurant_manager.domain
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            if (value != null)
-            {
+           
                 return string.IsNullOrWhiteSpace((value ?? "").ToString())
-                    ? new ValidationResult(false, "Заполните поле.")
+                    ? new ValidationResult(false, "Это поле должно быть заполнено.")
                     : ValidationResult.ValidResult;
-            }
-            return new ValidationResult(true, null);
+            
+           
         }
     }
 }

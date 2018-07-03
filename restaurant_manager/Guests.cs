@@ -14,11 +14,17 @@ namespace restaurant_manager
     
     public partial class Guests
     {
-        public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string PhoneNumber { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Guests()
+        {
+            this.ReservationSet = new HashSet<Reservation>();
+        }
     
-        public virtual Reservation Reservation { get; set; }
+        public int Id { get; set; }
+        public string PhoneNumber { get; set; }
+        public string FullName { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Reservation> ReservationSet { get; set; }
     }
 }

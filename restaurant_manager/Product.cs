@@ -17,16 +17,22 @@ namespace restaurant_manager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Product()
         {
-            this.Dishes = new HashSet<Dishes>();
+            this.IsSelected = false;
+            this.Formula = new HashSet<Formula>();
+            this.DishesSet = new HashSet<Dishes>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
         public int Product_categoryId { get; set; }
         public long count { get; set; }
+        public string Unit { get; set; }
+        public Nullable<bool> IsSelected { get; set; }
     
         public virtual Product_category Product_category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Dishes> Dishes { get; set; }
+        public virtual ICollection<Formula> Formula { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Dishes> DishesSet { get; set; }
     }
 }

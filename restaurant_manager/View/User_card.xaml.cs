@@ -18,8 +18,9 @@ namespace restaurant_manager
     /// <summary>
     /// Логика взаимодействия для User_card.xaml
     /// </summary>
-    public partial class User_card : UserControl
+    public partial class User_card : UserControl, IPasswordChanget
     {
+        public event EventHandler TryDel;
         public int Id { set; get; }
         public User_card()
         {
@@ -27,11 +28,38 @@ namespace restaurant_manager
 
         }
 
-        public User_card(int id, string name, string lastname, string login, string password)
+        public User_card(int id)
         {
             InitializeComponent();
-            DataContext = new EditPersonalViewModel(id);
-           
+            EditPersonalViewModel vm = new EditPersonalViewModel(id);
+            vm.DelVis += UseTryDal;
+            DataContext = vm;
+            vm.DelUserEvent += Hide;
+
+        }
+        public void UseTryDal(object obj, EventArgs e)
+        {
+            TryDel?.Invoke(obj, e);
+        }
+        private void Hide(object sender, EventArgs e)
+        {
+            this.Visibility = Visibility.Collapsed;
+            
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ResetPassword.Visibility = Visibility.Collapsed;
+        }
+
+        public string GetPassword_F()
+        {
+            return pwb1.Password;
+        }
+
+        public string GetPassword_S()
+        {
+            return pwb2.Password;
         }
     }
 }

@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:restaurant_manager"
-        xmlns:c="clr-namespace:restaurant_manager.ViewModel"
         xmlns:domain="clr-namespace:restaurant_manager.domain"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
@@ -16,12 +15,12 @@
      TextOptions.TextRenderingMode="Auto"
         x:Name="wnd"
      Background="{DynamicResource MaterialDesignPaper}"
-     FontFamily="{DynamicResource MaterialDesignFont}" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+     FontFamily="{DynamicResource MaterialDesignFont}" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Icon="/restaurant_manager;component/chef.png">
 
     <Window.Resources>
-        <c:LoginViewModel x:Key="LoginViewSource"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
     </Window.Resources>
-
+    <Grid>
     <Grid Margin="50,25">
         <Grid.RowDefinitions>
             <RowDefinition  />
@@ -42,20 +41,27 @@
   
                   >
             <TextBox.Text>
-                <Binding Path="Login" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" Source="{StaticResource LoginViewSource}">
-                    <Binding.ValidationRules>
-                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
-                    </Binding.ValidationRules>
+                <Binding Path="Login" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
+                    
                 </Binding>
             </TextBox.Text>
         </TextBox>
         <materialDesign:PackIcon Grid.Row="1" Grid.Column="0" Kind="Key" Foreground="{Binding ElementName=PasswordBox, Path=BorderBrush}" HorizontalAlignment="Right" VerticalAlignment="Stretch" />
 
-        <PasswordBox Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="1" x:Name="PasswordBox" materialDesign:HintAssist.Hint="Пароль"  VerticalAlignment="Center" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Margin="15,0,0,0" />
-        <TextBlock Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center"><Hyperlink TextDecorations="{x:Null}"  Foreground="#FFB0B0B0" > Забыли данные для входа ?</Hyperlink></TextBlock>
-        <Button Grid.Column="2" Grid.Row="2" Margin="15,0" Command="{Binding LoginCommand, Source={StaticResource LoginViewSource}}" CommandParameter="{Binding ElementName=wnd}" >Вход</Button>
-
-
-
+            <PasswordBox Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="1" x:Name="PasswordBox" materialDesign:HintAssist.Hint="Пароль"  VerticalAlignment="Center" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Margin="15,0,0,0" >
+            
+            </PasswordBox>
+            <TextBlock Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center"><Hyperlink TextDecorations="{x:Null}"  Foreground="#FFB0B0B0" > Забыли данные для входа ?</Hyperlink></TextBlock>
+            <Button Grid.Column="2" Grid.Row="2" Margin="15,0" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=wnd}"  >Вход</Button>
+        </Grid>
+        <Grid Visibility="{Binding Path=LoadVisible, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisConverter}}">
+            <Grid Background="Black" Opacity="0.4"></Grid>
+            <ProgressBar Width="50" Height="50"
+                        Style="{StaticResource MaterialDesignCircularProgressBar}"
+                        Value="0"
+                         IsIndeterminate="True" />
+        </Grid>
     </Grid>
+        
+    
 </Window>

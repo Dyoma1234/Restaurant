@@ -27,12 +27,7 @@
                         <TextBlock Margin="15,0">Добавить</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button >
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="AccountMinus" />
-                        <TextBlock Margin="15,0">Удалить</TextBlock>
-                    </StackPanel>
-                </Button>
+                
             </StackPanel>
         </materialDesign:PopupBox>
     </Grid>

@@ -8,8 +8,9 @@ namespace restaurant_manager
 {
    public interface ICreateUserList
     {
-       void AddUser(int id, string name, string lastname, string login, string password);
-       void InintNav();
+       void AddUser(int id);
+       void EraseUser(int id);
+       void InitUserList();
        void Clear();
     }
 }

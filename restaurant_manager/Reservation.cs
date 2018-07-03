@@ -16,8 +16,10 @@ namespace restaurant_manager
     {
         public int Id { get; set; }
         public System.DateTime Time { get; set; }
+        public int Guests_Id { get; set; }
+        public int Tables_Id { get; set; }
     
-        public virtual Guests Guests { get; set; }
-        public virtual Tables Tables { get; set; }
+        public virtual Guests GuestsSet { get; set; }
+        public virtual Tables TablesSet { get; set; }
     }
 }

@@ -4,10 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d" 
-             d:DesignHeight="256" d:DesignWidth="250">
+             d:DesignHeight="256" d:DesignWidth="250"
+             x:Name="Cwnd">
     <UserControl.Resources>
         <ResourceDictionary>
+                <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
             <ResourceDictionary.MergedDictionaries>
                 
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
@@ -19,91 +22,85 @@
         </ResourceDictionary>
 
     </UserControl.Resources>
-    <materialDesign:TransitioningContent>
-        <materialDesign:TransitioningContent.OpeningEffects>
-            <materialDesign:TransitionEffect Kind="FadeIn" />
-            <materialDesign:TransitionEffect Kind="ExpandIn" />
-        </materialDesign:TransitioningContent.OpeningEffects>
-    
-        <materialDesign:Flipper  Style="{StaticResource MaterialDesignCardFlipper}" >
-            <materialDesign:Flipper.FrontContent>
-                <Grid Height="256" Width="250">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="160" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <materialDesign:ColorZone Mode="PrimaryLight" VerticalAlignment="Stretch">
-                        <materialDesign:PackIcon Kind="AccountCircle" Height="128" Width="128"
+    <Grid>
+        <materialDesign:TransitioningContent>
+            <materialDesign:TransitioningContent.OpeningEffects>
+                <materialDesign:TransitionEffect Kind="FadeIn" />
+                <materialDesign:TransitionEffect Kind="ExpandIn" />
+            </materialDesign:TransitioningContent.OpeningEffects>
+
+            <materialDesign:Flipper  Style="{StaticResource MaterialDesignCardFlipper}" >
+                <materialDesign:Flipper.FrontContent>
+                    <Grid Height="256" Width="250">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="160" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <materialDesign:ColorZone Mode="PrimaryLight" VerticalAlignment="Stretch">
+                            <materialDesign:PackIcon Kind="AccountCircle" Height="128" Width="128"
                                                  VerticalAlignment="Center" HorizontalAlignment="Center" />
-                    </materialDesign:ColorZone>
-                    <materialDesign:PopupBox Style="{StaticResource MaterialDesignToolPopupBox}" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="White" Margin="10">
-                        <StackPanel>
-                            <Button Command="{x:Static materialDesign:Flipper.FlipCommand}"
+                        </materialDesign:ColorZone>
+                        <materialDesign:PopupBox Style="{StaticResource MaterialDesignToolPopupBox}" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="White" Margin="10">
+                            <StackPanel>
+                                <Button Command="{x:Static materialDesign:Flipper.FlipCommand}"
  >
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="AccountEdit" />
-                                    <TextBlock Margin="15,0">Редактировать</TextBlock>
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="AccountEdit" />
+                                        <TextBlock Margin="15,0">Редактировать</TextBlock>
 
-                                </StackPanel>
-                            </Button>
-                            <Button >
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="AccountMinus" />
-                                    <TextBlock Margin="15,0">Удалить</TextBlock>
-                                </StackPanel>
-                            </Button>
+                                    </StackPanel>
+                                </Button>
+                                <Button Command="{Binding DelUserCommand}" CommandParameter="{Binding Id}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <materialDesign:PackIcon Kind="AccountMinus" />
+                                        <TextBlock Margin="15,0">Удалить</TextBlock>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+
+
+                        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock  Name="FullName" Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock    Style="{StaticResource MaterialDesignBody2TextBlock}" Margin="10" Text="{Binding Pos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
                         </StackPanel>
-                    </materialDesign:PopupBox>
-
-
-                    <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-
-                        <TextBlock  Name="FullName" Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        <!--<Button   Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                                Margin=" 10,10"
-                                >
-                        <materialDesign:PackIcon Kind="AccountEdit" />
-                    </Button>-->
-                        <TextBlock    Style="{StaticResource MaterialDesignBody2TextBlock}" Margin="10" Text="{Binding Pos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
-
-                    </StackPanel>
-                </Grid>
-            </materialDesign:Flipper.FrontContent>
-            <materialDesign:Flipper.BackContent>
-                <Grid Height="256" Width="250">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <materialDesign:ColorZone Mode="Accent" Padding="6">
-                        <StackPanel Orientation="Horizontal">
-                            <Button Style="{StaticResource MaterialDesignToolForegroundButton}"
+                    </Grid>
+                </materialDesign:Flipper.FrontContent>
+                <materialDesign:Flipper.BackContent>
+                    <Grid Height="256" Width="250">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <materialDesign:ColorZone Mode="Accent" Padding="6">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Style="{StaticResource MaterialDesignToolForegroundButton}"
                                 Command="{x:Static materialDesign:Flipper.FlipCommand}"
                                 HorizontalAlignment="Left">
-                                <materialDesign:PackIcon Kind="ArrowLeft" HorizontalAlignment="Right" />
-                            </Button>
-                            <TextBlock Margin="8 0 0 0" VerticalAlignment="Center">Редактировать</TextBlock>
-                        </StackPanel>
-                    </materialDesign:ColorZone>
-                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                        <Grid Grid.Row="1" Margin="0 6 0 0" HorizontalAlignment="Center" VerticalAlignment="Top"
+                                    <materialDesign:PackIcon Kind="ArrowLeft" HorizontalAlignment="Right" />
+                                </Button>
+                                <TextBlock Margin="8 0 0 0" VerticalAlignment="Center">Редактировать</TextBlock>
+                            </StackPanel>
+                        </materialDesign:ColorZone>
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                            <Grid Grid.Row="1" Margin="0 6 0 0" HorizontalAlignment="Center" VerticalAlignment="Top"
                           Width="172">
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <TextBox materialDesign:HintAssist.Hint="Имя" materialDesign:HintAssist.IsFloating="True"
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <TextBox materialDesign:HintAssist.Hint="Имя" materialDesign:HintAssist.IsFloating="True"
                                  Margin="0 12 0 0" x:Name="Name" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBox Grid.Row="1" materialDesign:HintAssist.Hint="Фамилия" materialDesign:HintAssist.IsFloating="True"
+                                <TextBox Grid.Row="1" materialDesign:HintAssist.Hint="Фамилия" materialDesign:HintAssist.IsFloating="True"
                                  Margin="0 12 0 0" x:Name="LastName" Text="{Binding LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBox Grid.Row="2" materialDesign:HintAssist.Hint="Телефон" materialDesign:HintAssist.IsFloating="True"
+                                <TextBox Grid.Row="2" materialDesign:HintAssist.Hint="Телефон" materialDesign:HintAssist.IsFloating="True"
                                  Margin="0 12 0 0" Text="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <ComboBox Grid.Row="3" Margin="0 12 0 0" materialDesign:HintAssist.Hint="Должность"
+                                <ComboBox Grid.Row="3" Margin="0 12 0 0" materialDesign:HintAssist.Hint="Должность"
                             Style="{StaticResource MaterialDesignFloatingHintComboBox}"
 
                                 ItemsSource="{Binding Path=staff_Pos}"
@@ -112,17 +109,62 @@
                                   SelectedValuePath="Position"
                                   >
 
-                            </ComboBox>
-                            <TextBox IsEnabled="False"  Grid.Row="4" materialDesign:HintAssist.Hint="Логин" materialDesign:HintAssist.IsFloating="True"
+                                </ComboBox>
+                                <TextBox IsEnabled="False"  Grid.Row="4" materialDesign:HintAssist.Hint="Логин" materialDesign:HintAssist.IsFloating="True"
                                  Margin="0 12 0 0" Text="{Binding Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBox Grid.Row="5" materialDesign:HintAssist.Hint="Пароль" materialDesign:HintAssist.IsFloating="True"
-                                 Margin="0 12 0 0" Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Button Grid.Row="6" Margin="10,12" Command="{Binding SaveCommand}">Сохранить</Button>
+                                <Button Grid.Row="5"  
+                                 Margin="10,12"  Command="{Binding ShowResetCommand}">Cбросить пароль</Button>
+                                <Button Grid.Row="6" Margin="10,12" Command="{Binding SaveCommand}">Сохранить</Button>
 
-                        </Grid>
-                    </ScrollViewer>
+                            </Grid>
+                        </ScrollViewer>
+                    </Grid>
+                </materialDesign:Flipper.BackContent>
+            </materialDesign:Flipper>
+        </materialDesign:TransitioningContent>
+    <!--e-->
+        <materialDesign:TransitioningContent x:Name="ResetPassword"  Visibility="{Binding ResetVis, Converter={StaticResource BoolToVisConverter},Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged}">
+            <materialDesign:TransitioningContent.OpeningEffects>
+                <materialDesign:TransitionEffect Kind="FadeIn" />
+                <materialDesign:TransitionEffect Kind="SlideInFromTop" />
+            </materialDesign:TransitioningContent.OpeningEffects>
+            <Grid Background="White">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid Background="{StaticResource PrimaryHueMidBrush}">
+                    <TextBlock Margin="15,0" Text="Сброс старого пароля"  
+
+                FontWeight="Bold" TextTrimming="CharacterEllipsis" 
+
+                LineHeight="22" FontSize="16" 
+
+                VerticalAlignment="Center" Foreground="White"></TextBlock>
                 </Grid>
-            </materialDesign:Flipper.BackContent>
-        </materialDesign:Flipper>
-    </materialDesign:TransitioningContent>
+                <TextBox Text="{Binding SecretWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" VerticalAlignment="Center" Margin="15,0" materialDesign:HintAssist.Hint="Сикретное слово" materialDesign:HintAssist.IsFloating="True" materialDesign:HintAssist.HintOpacity="0.3"></TextBox>
+                <PasswordBox x:Name="pwb1" Grid.Row="2" VerticalAlignment="Center" Margin="15,0" materialDesign:HintAssist.Hint="Новый пароль" materialDesign:HintAssist.IsFloating="True" materialDesign:HintAssist.HintOpacity="0.3">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PasswordChanged">
+                            <i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{x:Reference Cwnd}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </PasswordBox>
+                <PasswordBox x:Name="pwb2" Grid.Row="3" VerticalAlignment="Center" Margin="15,0" materialDesign:HintAssist.Hint="Повторить пароль" materialDesign:HintAssist.IsFloating="True" materialDesign:HintAssist.HintOpacity="0.3">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="PasswordChanged">
+                            <i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{x:Reference Cwnd}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </PasswordBox>
+
+                <Button  Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="15,5" MinWidth="95" Click="Button_Click">Отмена</Button>
+                <Button Command="{Binding ResetCommand}"  CommandParameter= "2" Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15,5" MinWidth="95" >Сбросить</Button>
+
+            </Grid>
+        </materialDesign:TransitioningContent>
+    </Grid>
 </UserControl>
