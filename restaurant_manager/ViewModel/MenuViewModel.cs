@@ -526,7 +526,7 @@ namespace restaurant_manager.ViewModel
                     _model.db.DishesSet.Add(SelectedItem);
                     _model.db.SaveChanges();
                 }
-
+                //
             }
         }
 
