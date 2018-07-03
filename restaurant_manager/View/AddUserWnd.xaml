@@ -34,7 +34,7 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Имя" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4">
+        <TextBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Имя" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4" VerticalAlignment="Center">
             <TextBox.Text>
                 <Binding Path="Name" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
                     <Binding.ValidationRules>
@@ -43,7 +43,7 @@
                 </Binding>
             </TextBox.Text>
         </TextBox>
-        <TextBox Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Фамилия" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4">
+        <TextBox Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Фамилия" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4" VerticalAlignment="Center">
             <TextBox.Text>
                 <Binding Path="Surname" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
                     <Binding.ValidationRules>
@@ -53,7 +53,7 @@
             </TextBox.Text>
         </TextBox>
         <ComboBox Grid.Row="2" materialDesign:HintAssist.Hint="Должность" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4"
-  Style="{StaticResource MaterialDesignFloatingHintComboBox}"  Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Bottom"
+  Style="{StaticResource MaterialDesignFloatingHintComboBox}"  Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"
                                   ItemsSource="{Binding Path=Pos}"
                                   SelectedItem="{Binding Path=Cur_pos}"
                                   DisplayMemberPath="Position" 
@@ -66,7 +66,7 @@
                 </Binding>
             </ComboBox.Text>
         </ComboBox>
-        <TextBox Grid.Row="3"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Телефон" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4">
+        <TextBox Grid.Row="3"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Телефон" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4" VerticalAlignment="Center">
             <TextBox.Text>
                 <Binding Path="Phone" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
                     <Binding.ValidationRules>
@@ -77,7 +77,7 @@
                 </Binding>
             </TextBox.Text>
         </TextBox>
-        <TextBox Grid.Row="4"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Логин" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4">
+        <TextBox Grid.Row="4"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Логин" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4" VerticalAlignment="Center">
             <TextBox.Text>
                 <Binding Path="Login" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
                     <Binding.ValidationRules>
@@ -86,20 +86,26 @@
                 </Binding>
             </TextBox.Text>
         </TextBox>
-        <PasswordBox x:Name="Fpwb" Grid.Row="5"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Пароль" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4">
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Vertical" VerticalAlignment="Center" Margin="0">
+        <PasswordBox x:Name="Fpwb" Grid.Row="5"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Пароль" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4" VerticalAlignment="Top" PasswordChanged="Fpwb_PasswordChanged">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="PasswordChanged">
                     <i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{Binding ElementName=wnd}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </PasswordBox>
-        <PasswordBox x:Name="Spwb" Grid.Row="6"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Повторить пароль" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4">
+            <TextBlock x:Name="FpwbMsg" Visibility="Visible" FontSize="10" Margin="3,3,0,-7" VerticalAlignment="Top" Foreground="#DDFF0000" >Это поле должно быть заплнено.</TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="6" Grid.ColumnSpan="2">
+        <PasswordBox x:Name="Spwb" Grid.Row="6"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Повторить пароль" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4" VerticalAlignment="Center" PasswordChanged="Spwb_PasswordChanged">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="PasswordChanged">
                     <i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{Binding ElementName=wnd}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </PasswordBox>
+            <TextBlock x:Name="SpwbMsg" Visibility="Visible" FontSize="10" Margin="3,3,0,-7" Foreground="#DDFF0000" >Это поле должно быть заплнено.</TextBlock>
+        </StackPanel>
         <Button Grid.Row="7" Grid.Column="0" Margin="15,10"  Command="{Binding AddNewUserCommand}" CommandParameter="{Binding ElementName=wnd}" >Сохранить</Button>
         <Button Grid.Row="7" Grid.Column="1" Margin="15, 10" Click="Button_Click"  >Отмена</Button>
 

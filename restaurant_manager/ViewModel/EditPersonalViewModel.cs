@@ -337,7 +337,8 @@ namespace restaurant_manager.ViewModel
                         old_fullname = _fullname;
                         old_login = _login;
                         old_password = _password;
-
+                        FullName = (_name + " " + _lastname);
+                        Pos = Cur_pos.Position;
                         break;
                     }
                 }

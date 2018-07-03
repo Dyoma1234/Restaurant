@@ -22,17 +22,21 @@ namespace restaurant_manager
     /// </summary>
     public partial class AddUserWnd : Window , IPasswordChanget
     {
-     
+       private Brush borderbrush;
+        private Brush selectionbrush;
         public AddUserWnd()
         {
             InitializeComponent();
             DataContext = new AddUserViewModel();
+            borderbrush = Fpwb.Foreground;
+            selectionbrush = Fpwb.SelectionBrush;
         }
         public AddUserWnd(ICreateUserList cul)
         {
             InitializeComponent();
             DataContext = new AddUserViewModel(cul);
-          
+            borderbrush = Fpwb.Foreground;
+            selectionbrush = Fpwb.BorderBrush;
         }
 
         public string GetPassword_F()
@@ -58,6 +62,55 @@ namespace restaurant_manager
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+       
+
+        private void Fpwb_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            InitFirst();
+
+        }
+
+        private void Spwb_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            InitSec();
+        }
+        private void InitFirst()
+        {
+            if (string.IsNullOrWhiteSpace(Fpwb.Password))
+            {
+                Fpwb.BorderBrush = System.Windows.Media.Brushes.Red;
+                Fpwb.CaretBrush = System.Windows.Media.Brushes.Red;
+
+                FpwbMsg.Text = "Это поле должно быть заполнено.";
+                FpwbMsg.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                Fpwb.BorderBrush = borderbrush;
+                Fpwb.SelectionBrush = selectionbrush;
+                FpwbMsg.Visibility = Visibility.Hidden;
+
+            }
+        }
+        private void InitSec()
+        {
+            if (string.IsNullOrWhiteSpace(Spwb.Password))
+            {
+                Spwb.BorderBrush = System.Windows.Media.Brushes.Red;
+                Spwb.CaretBrush = System.Windows.Media.Brushes.Red;
+
+                SpwbMsg.Text = "Это поле должно быть заполнено.";
+                SpwbMsg.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                Spwb.BorderBrush = borderbrush;
+                Spwb.SelectionBrush = selectionbrush;
+                SpwbMsg.Visibility = Visibility.Hidden;
+
+            }
         }
     }
 }

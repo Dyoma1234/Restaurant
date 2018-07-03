@@ -24,6 +24,8 @@
             x:Name="Table"
   Margin="0 8 0 0"
   ItemsSource="{Binding DishesList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+  SelectedItem="{Binding SelectedItem,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+  SelectionMode="Single"
   CanUserSortColumns="True"
   CanUserAddRows="{Binding AddNewDish, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
   IsReadOnly="{Binding EditMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -44,39 +46,39 @@
                             <CheckBox
                                          HorizontalAlignment="Center"
                                          DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext}"
-                                         IsChecked="{Binding IsAllItemsSelected}" />
+                                         IsChecked="{Binding IsAllItemsSelected, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                         </Border>
                     </DataGridCheckBoxColumn.Header>
                 </DataGridCheckBoxColumn>
                 <DataGridTextColumn
                               IsReadOnly="True"
-                              Binding="{Binding Id}"
+                              Binding="{Binding Id, UpdateSourceTrigger=PropertyChanged}"
                               Header="Номер"
                               EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
                 <!-- if you want to use the pop up style (MaterialDesignDataGridTextColumnPopupEditingStyle), you must use MaterialDataGridTextColumn -->
                 <materialDesign:MaterialDataGridTextColumn
                              IsReadOnly="{Binding EditMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Binding="{Binding Name}"
+                             Binding="{Binding Name , UpdateSourceTrigger=PropertyChanged}"
                              Header="Название"
                              MaxLength="50"
                              EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}" />
                 <materialDesign:MaterialDataGridComboBoxColumn
                             materialDesign:DataGridAssist.EnableEditBoxAssist="{Binding EditMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Header="Категория"
-                 SelectedValueBinding="{Binding Dishes_categories}"
+                 SelectedValueBinding="{Binding Dishes_categories , UpdateSourceTrigger=PropertyChanged}"
                  ItemsSourceBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.DishesCategoriesList}" 
                  DisplayMemberPath="Name" />
                 <!-- set a max length to get an indicator in the editor -->
                 <materialDesign:MaterialDataGridTextColumn
                     IsReadOnly="{Binding EditMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    Binding="{Binding Weight}"
+                    Binding="{Binding Weight , UpdateSourceTrigger=PropertyChanged}"
                             
                             Header="Вес"
                             MaxLength="50"
                             EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}" />
                 <materialDesign:MaterialDataGridTextColumn
                              IsReadOnly="{Binding EditMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Binding="{Binding Price}"
+                             Binding="{Binding Price , UpdateSourceTrigger=PropertyChanged}"
                              Header="Цена"
                              MaxLength="50"
                              EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">

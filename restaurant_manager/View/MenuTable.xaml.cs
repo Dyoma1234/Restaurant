@@ -44,5 +44,10 @@ namespace restaurant_manager
             if (!(char.IsDigit(e.Text, e.Text.Length - 1) || approvedDecimalPoint))
                 e.Handled = true;
         }
+
+        private void Table_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+
+        }
     }
 }

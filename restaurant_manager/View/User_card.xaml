@@ -103,8 +103,8 @@
                                 <ComboBox Grid.Row="3" Margin="0 12 0 0" materialDesign:HintAssist.Hint="Должность"
                             Style="{StaticResource MaterialDesignFloatingHintComboBox}"
 
-                                ItemsSource="{Binding Path=staff_Pos}"
-                                  SelectedItem="{Binding Path=Cur_pos}"
+                                  ItemsSource="{Binding Path=staff_Pos}"
+                                  SelectedItem="{Binding Path=Cur_pos, UpdateSourceTrigger=PropertyChanged}"
                                   DisplayMemberPath="Position" 
                                   SelectedValuePath="Position"
                                   >
@@ -152,6 +152,7 @@
                             <i:InvokeCommandAction Command="{Binding PasswordChangedCommand}" CommandParameter="{x:Reference Cwnd}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
+                    
                 </PasswordBox>
                 <PasswordBox x:Name="pwb2" Grid.Row="3" VerticalAlignment="Center" Margin="15,0" materialDesign:HintAssist.Hint="Повторить пароль" materialDesign:HintAssist.IsFloating="True" materialDesign:HintAssist.HintOpacity="0.3">
                     <i:Interaction.Triggers>

@@ -15,9 +15,10 @@ namespace restaurant_manager.ViewModel
         private bool _can_edit;
         private bool _tablevisible;
         private bool _notfound;
+        private bool _isallitemselected;
         private string _search_string;
         private string _searchcombo_string;
-
+        private Product _SelectedItem;
 
         private Model _model;
         private List<Product> _listproduct;
@@ -118,6 +119,18 @@ namespace restaurant_manager.ViewModel
                 return _notfound;
             }
         }
+        public Product SelectedItem
+        {
+            set
+            {
+                _SelectedItem = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("SelectedItem"));
+            }
+            get
+            {
+                return _SelectedItem;
+            }
+        }
 
         public StorageViewModel()
         {
@@ -137,7 +150,7 @@ namespace restaurant_manager.ViewModel
         private DelegateCommand _edit_command;
         private DelegateCommand _save_command;
         private DelegateCommand _search_command;
-
+        private DelegateCommand _endedit_command;
 
         public bool AddNew
         {
@@ -167,7 +180,27 @@ namespace restaurant_manager.ViewModel
         }
         public event EventHandler Loading;
         public event EventHandler AddNewProductEvent;
-
+        public bool IsAllItemsSelected
+        {
+            set
+            {
+                if (Editmode == false)
+                {
+                    _isallitemselected = value;
+                    foreach (Product item in ListProduct)
+                    {
+                        item.IsSelected = value;
+                        UpdateEv?.Invoke(null, null);
+                    }
+                    OnPropertyChanged(new PropertyChangedEventArgs("IsAllItemsSelected"));
+                    OnPropertyChanged(new PropertyChangedEventArgs("ListProduct"));
+                }
+            }
+            get
+            {
+                return _isallitemselected;
+            }
+        }
 
         public ICommand AddNewProductCommand
         {
@@ -228,7 +261,41 @@ namespace restaurant_manager.ViewModel
                 return _search_command;
             }
         }
+        public ICommand EndEdit
+        {
+            get
+            {
+                if (_endedit_command == null)
+                {
+                    _endedit_command = new DelegateCommand(SaveEditedTable, null);
 
+                }
+                return _endedit_command;
+            }
+        }
+
+        private async void SaveEditedTable(object obj)
+        {
+            if (SelectedItem != null)
+            {
+                await _model.db.SaveChangesAsync();
+                Product product = _model.db.ProductSet.Where(i => i.Id == SelectedItem.Id).FirstOrDefault();
+                if (product == null)
+                    return;
+
+                if (product.Name != SelectedItem.Name ||
+                    product.Unit != SelectedItem.Unit ||
+                    product.count != SelectedItem.count ||
+                    product.Product_categoryId != SelectedItem.Product_categoryId)
+                {
+                    _model.db.ProductSet.Remove(product);
+                    _model.db.SaveChanges();
+                    _model.db.ProductSet.Add(SelectedItem);
+                    _model.db.SaveChanges();
+                }
+
+            }
+        }
 
         private bool CanSave(object obj)
         {

@@ -10,7 +10,7 @@ namespace restaurant_manager.ViewModel
 {
     class MenuViewModel : BaseViewMode
     {
-        private bool isallitemselected;
+        private bool _isallitemselected;
         private Model _model;
         private List<Dishes> _disheslist;
         private List<Dishes_categories> _categories;
@@ -27,12 +27,12 @@ namespace restaurant_manager.ViewModel
         private string _addnewcat;
         private string _addnewweight;
         private string _addnewpric;
-
+        private Dishes _SelectedItem;
         public bool AddNewDish
         {
             set
             {
-                _addnewdish  = value;
+                _addnewdish = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("AddNewDish"));
             }
             get
@@ -176,23 +176,37 @@ namespace restaurant_manager.ViewModel
             }
         }
         public List<Dishes_categories> DishesCategoriesList { set; get; }
+        public Dishes SelectedItem
+        {
+            set
+            {
+                _SelectedItem = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("SelectedItem"));
+            }
+            get
+            {
+                return _SelectedItem;
+            }
+        }
         public bool IsAllItemsSelected
         {
             set
             {
-                isallitemselected = value;
-                foreach (Dishes item in DishesList)
+                if (EditMode == false)
                 {
-                    item.IsSelected = value;
-                    UpdateEv?.Invoke(null, null);
+                    _isallitemselected = value;
+                    foreach (Dishes item in DishesList)
+                    {
+                        item.IsSelected = value;
+                        UpdateEv?.Invoke(null, null);
+                    }
+                    OnPropertyChanged(new PropertyChangedEventArgs("IsAllItemsSelected"));
+                    OnPropertyChanged(new PropertyChangedEventArgs("DishesList"));
                 }
-                OnPropertyChanged(new PropertyChangedEventArgs("IsAllItemsSelected"));
-                OnPropertyChanged(new PropertyChangedEventArgs("DishesList"));
-
             }
             get
             {
-                return isallitemselected;
+                return _isallitemselected;
             }
         }
 
@@ -363,10 +377,10 @@ namespace restaurant_manager.ViewModel
                 _model.db.DishesSet.Add(new_dish);
                 await _model.db.SaveChangesAsync();
 
-                //EditMode = true; 
                 DishesList.Add(new_dish);
                 OnPropertyChanged(new PropertyChangedEventArgs("DishesList"));
-               // EditMode = false;
+                Clear();
+              WpfMessageBox.Show("Добавление", "Новое блюдо успешно добавлено в меню", MessageBoxType.Information);
                 TableVisible = false;
                 AddVisible = false;
                 HelpBtnVisibility = true;
@@ -385,7 +399,15 @@ namespace restaurant_manager.ViewModel
             TableVisible = false;
             AddVisible = false;
             HelpBtnVisibility = true;
+            Clear();
 
+        }
+        private void Clear()
+        {
+            AddNewName = string.Empty;
+            AddNewPric = string.Empty;
+            AddNewWeight = string.Empty;
+            AddNewCat = string.Empty;
         }
         private void EditModeC(object obj)
         {
@@ -485,9 +507,27 @@ namespace restaurant_manager.ViewModel
             UpdateEv?.Invoke(obj, null);
         }
 
-        private async void SaveEditedTable(object obj)
+        private async  void SaveEditedTable(object obj)
         {
-           await _model.db.SaveChangesAsync();
+            if (SelectedItem != null)
+            {
+                await _model.db.SaveChangesAsync();
+                Dishes dishes = _model.db.DishesSet.Where(i => i.Id == SelectedItem.Id).FirstOrDefault();
+                if (dishes == null)
+                    return;
+
+                if (dishes.Name != SelectedItem.Name ||
+                    dishes.Price != SelectedItem.Price ||
+                    dishes.Weight != SelectedItem.Weight ||
+                    dishes.Dishes_categoriesId != SelectedItem.Dishes_categoriesId)
+                {
+                    _model.db.DishesSet.Remove(dishes);
+                    _model.db.SaveChanges();
+                    _model.db.DishesSet.Add(SelectedItem);
+                    _model.db.SaveChanges();
+                }
+
+            }
         }
 
         public MenuViewModel()
