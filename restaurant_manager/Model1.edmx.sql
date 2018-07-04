@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 07/03/2018 00:19:37
+-- Date Created: 07/04/2018 03:23:54
 -- Generated from EDMX file: C:\Users\Dyoma\source\repos\restaurant_manager\restaurant_manager\Model1.edmx
 -- --------------------------------------------------
 
@@ -17,20 +17,20 @@ GO
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[FK_Product_categoryProduct]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ProductSet] DROP CONSTRAINT [FK_Product_categoryProduct];
+GO
+IF OBJECT_ID(N'[dbo].[FK_Staff_PosStaff]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[StaffSet] DROP CONSTRAINT [FK_Staff_PosStaff];
+GO
 IF OBJECT_ID(N'[dbo].[FK_DishesDishes_categories]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[DishesSet] DROP CONSTRAINT [FK_DishesDishes_categories];
 GO
 IF OBJECT_ID(N'[dbo].[FK_DishesFormula]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[FormulaSet] DROP CONSTRAINT [FK_DishesFormula];
 GO
-IF OBJECT_ID(N'[dbo].[FK_Order_DishesDishes]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Order_DishesSet] DROP CONSTRAINT [FK_Order_DishesDishes];
-GO
-IF OBJECT_ID(N'[dbo].[FK_Order_DishesTables]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Order_DishesSet] DROP CONSTRAINT [FK_Order_DishesTables];
-GO
-IF OBJECT_ID(N'[dbo].[FK_Product_categoryProduct]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[ProductSet] DROP CONSTRAINT [FK_Product_categoryProduct];
+IF OBJECT_ID(N'[dbo].[FK_ProductFormula]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[FormulaSet] DROP CONSTRAINT [FK_ProductFormula];
 GO
 IF OBJECT_ID(N'[dbo].[FK_ProductDishes_Dishes]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[ProductDishes] DROP CONSTRAINT [FK_ProductDishes_Dishes];
@@ -38,52 +38,28 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_ProductDishes_Product]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[ProductDishes] DROP CONSTRAINT [FK_ProductDishes_Product];
 GO
-IF OBJECT_ID(N'[dbo].[FK_ProductFormula]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[FormulaSet] DROP CONSTRAINT [FK_ProductFormula];
-GO
-IF OBJECT_ID(N'[dbo].[FK_Ready_DishesOrder_Dishes]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Order_DishesSet] DROP CONSTRAINT [FK_Ready_DishesOrder_Dishes];
-GO
 IF OBJECT_ID(N'[dbo].[FK_ReservationGuests]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[ReservationSet] DROP CONSTRAINT [FK_ReservationGuests];
 GO
 IF OBJECT_ID(N'[dbo].[FK_ReservationTables]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[ReservationSet] DROP CONSTRAINT [FK_ReservationTables];
 GO
-IF OBJECT_ID(N'[dbo].[FK_Staff_PosStaff]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[StaffSet] DROP CONSTRAINT [FK_Staff_PosStaff];
-GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
 -- --------------------------------------------------
 
-IF OBJECT_ID(N'[dbo].[Dishes_categoriesSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Dishes_categoriesSet];
-GO
-IF OBJECT_ID(N'[dbo].[DishesSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[DishesSet];
-GO
-IF OBJECT_ID(N'[dbo].[FormulaSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[FormulaSet];
-GO
-IF OBJECT_ID(N'[dbo].[GuestsSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[GuestsSet];
-GO
-IF OBJECT_ID(N'[dbo].[Order_DishesSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Order_DishesSet];
+IF OBJECT_ID(N'[dbo].[ProductSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[ProductSet];
 GO
 IF OBJECT_ID(N'[dbo].[Product_categorySet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[Product_categorySet];
 GO
-IF OBJECT_ID(N'[dbo].[ProductDishes]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[ProductDishes];
+IF OBJECT_ID(N'[dbo].[DishesSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[DishesSet];
 GO
-IF OBJECT_ID(N'[dbo].[ProductSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[ProductSet];
-GO
-IF OBJECT_ID(N'[dbo].[Ready_DishesSet]', 'U') IS NOT NULL
-    DROP TABLE [dbo].[Ready_DishesSet];
+IF OBJECT_ID(N'[dbo].[GuestsSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[GuestsSet];
 GO
 IF OBJECT_ID(N'[dbo].[ReservationSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[ReservationSet];
@@ -94,11 +70,23 @@ GO
 IF OBJECT_ID(N'[dbo].[StaffSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[StaffSet];
 GO
+IF OBJECT_ID(N'[dbo].[Ready_DishesSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Ready_DishesSet];
+GO
 IF OBJECT_ID(N'[dbo].[sysdiagrams]', 'U') IS NOT NULL
     DROP TABLE [dbo].[sysdiagrams];
 GO
+IF OBJECT_ID(N'[dbo].[Dishes_categoriesSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Dishes_categoriesSet];
+GO
+IF OBJECT_ID(N'[dbo].[FormulaSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[FormulaSet];
+GO
 IF OBJECT_ID(N'[dbo].[TablesSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[TablesSet];
+GO
+IF OBJECT_ID(N'[dbo].[ProductDishes]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[ProductDishes];
 GO
 
 -- --------------------------------------------------
@@ -171,18 +159,10 @@ CREATE TABLE [dbo].[StaffSet] (
 );
 GO
 
--- Creating table 'Order_DishesSet'
-CREATE TABLE [dbo].[Order_DishesSet] (
-    [Id] int IDENTITY(1,1) NOT NULL,
-    [Ready_Dishes_Id] int  NOT NULL,
-    [Dishes_Id] int  NOT NULL,
-    [Tables_Id] int  NOT NULL
-);
-GO
-
 -- Creating table 'Ready_DishesSet'
 CREATE TABLE [dbo].[Ready_DishesSet] (
-    [Id] int IDENTITY(1,1) NOT NULL
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [CheckId] int  NOT NULL
 );
 GO
 
@@ -219,10 +199,26 @@ CREATE TABLE [dbo].[TablesSet] (
 );
 GO
 
+-- Creating table 'CheckSet'
+CREATE TABLE [dbo].[CheckSet] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [Date] datetime  NOT NULL,
+    [StaffId] int  NOT NULL,
+    [TablesId] int  NOT NULL
+);
+GO
+
 -- Creating table 'ProductDishes'
 CREATE TABLE [dbo].[ProductDishes] (
     [DishesSet_Id] int  NOT NULL,
     [ProductSet_Id] int  NOT NULL
+);
+GO
+
+-- Creating table 'CheckDishes'
+CREATE TABLE [dbo].[CheckDishes] (
+    [CheckDishes_Dishes_Id] int  NOT NULL,
+    [Dishes_Id] int  NOT NULL
 );
 GO
 
@@ -272,12 +268,6 @@ ADD CONSTRAINT [PK_StaffSet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [Id] in table 'Order_DishesSet'
-ALTER TABLE [dbo].[Order_DishesSet]
-ADD CONSTRAINT [PK_Order_DishesSet]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
 -- Creating primary key on [Id] in table 'Ready_DishesSet'
 ALTER TABLE [dbo].[Ready_DishesSet]
 ADD CONSTRAINT [PK_Ready_DishesSet]
@@ -308,10 +298,22 @@ ADD CONSTRAINT [PK_TablesSet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
+-- Creating primary key on [Id] in table 'CheckSet'
+ALTER TABLE [dbo].[CheckSet]
+ADD CONSTRAINT [PK_CheckSet]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
 -- Creating primary key on [DishesSet_Id], [ProductSet_Id] in table 'ProductDishes'
 ALTER TABLE [dbo].[ProductDishes]
 ADD CONSTRAINT [PK_ProductDishes]
     PRIMARY KEY CLUSTERED ([DishesSet_Id], [ProductSet_Id] ASC);
+GO
+
+-- Creating primary key on [CheckDishes_Dishes_Id], [Dishes_Id] in table 'CheckDishes'
+ALTER TABLE [dbo].[CheckDishes]
+ADD CONSTRAINT [PK_CheckDishes]
+    PRIMARY KEY CLUSTERED ([CheckDishes_Dishes_Id], [Dishes_Id] ASC);
 GO
 
 -- --------------------------------------------------
@@ -331,21 +333,6 @@ GO
 CREATE INDEX [IX_FK_Product_categoryProduct]
 ON [dbo].[ProductSet]
     ([Product_categoryId]);
-GO
-
--- Creating foreign key on [Ready_Dishes_Id] in table 'Order_DishesSet'
-ALTER TABLE [dbo].[Order_DishesSet]
-ADD CONSTRAINT [FK_Ready_DishesOrder_Dishes]
-    FOREIGN KEY ([Ready_Dishes_Id])
-    REFERENCES [dbo].[Ready_DishesSet]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_Ready_DishesOrder_Dishes'
-CREATE INDEX [IX_FK_Ready_DishesOrder_Dishes]
-ON [dbo].[Order_DishesSet]
-    ([Ready_Dishes_Id]);
 GO
 
 -- Creating foreign key on [Staff_PosId] in table 'StaffSet'
@@ -408,21 +395,6 @@ ON [dbo].[FormulaSet]
     ([ProductId]);
 GO
 
--- Creating foreign key on [Dishes_Id] in table 'Order_DishesSet'
-ALTER TABLE [dbo].[Order_DishesSet]
-ADD CONSTRAINT [FK_Order_DishesDishes]
-    FOREIGN KEY ([Dishes_Id])
-    REFERENCES [dbo].[DishesSet]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_Order_DishesDishes'
-CREATE INDEX [IX_FK_Order_DishesDishes]
-ON [dbo].[Order_DishesSet]
-    ([Dishes_Id]);
-GO
-
 -- Creating foreign key on [DishesSet_Id] in table 'ProductDishes'
 ALTER TABLE [dbo].[ProductDishes]
 ADD CONSTRAINT [FK_ProductDishes_Dishes]
@@ -445,21 +417,6 @@ GO
 CREATE INDEX [IX_FK_ProductDishes_Product]
 ON [dbo].[ProductDishes]
     ([ProductSet_Id]);
-GO
-
--- Creating foreign key on [Tables_Id] in table 'Order_DishesSet'
-ALTER TABLE [dbo].[Order_DishesSet]
-ADD CONSTRAINT [FK_Order_DishesTables]
-    FOREIGN KEY ([Tables_Id])
-    REFERENCES [dbo].[TablesSet]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_Order_DishesTables'
-CREATE INDEX [IX_FK_Order_DishesTables]
-ON [dbo].[Order_DishesSet]
-    ([Tables_Id]);
 GO
 
 -- Creating foreign key on [Guests_Id] in table 'ReservationSet'
@@ -490,6 +447,75 @@ GO
 CREATE INDEX [IX_FK_ReservationTables]
 ON [dbo].[ReservationSet]
     ([Tables_Id]);
+GO
+
+-- Creating foreign key on [StaffId] in table 'CheckSet'
+ALTER TABLE [dbo].[CheckSet]
+ADD CONSTRAINT [FK_CheckStaff]
+    FOREIGN KEY ([StaffId])
+    REFERENCES [dbo].[StaffSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_CheckStaff'
+CREATE INDEX [IX_FK_CheckStaff]
+ON [dbo].[CheckSet]
+    ([StaffId]);
+GO
+
+-- Creating foreign key on [CheckId] in table 'Ready_DishesSet'
+ALTER TABLE [dbo].[Ready_DishesSet]
+ADD CONSTRAINT [FK_Ready_DishesCheck]
+    FOREIGN KEY ([CheckId])
+    REFERENCES [dbo].[CheckSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_Ready_DishesCheck'
+CREATE INDEX [IX_FK_Ready_DishesCheck]
+ON [dbo].[Ready_DishesSet]
+    ([CheckId]);
+GO
+
+-- Creating foreign key on [TablesId] in table 'CheckSet'
+ALTER TABLE [dbo].[CheckSet]
+ADD CONSTRAINT [FK_CheckTables]
+    FOREIGN KEY ([TablesId])
+    REFERENCES [dbo].[TablesSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_CheckTables'
+CREATE INDEX [IX_FK_CheckTables]
+ON [dbo].[CheckSet]
+    ([TablesId]);
+GO
+
+-- Creating foreign key on [CheckDishes_Dishes_Id] in table 'CheckDishes'
+ALTER TABLE [dbo].[CheckDishes]
+ADD CONSTRAINT [FK_CheckDishes_Check]
+    FOREIGN KEY ([CheckDishes_Dishes_Id])
+    REFERENCES [dbo].[CheckSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [Dishes_Id] in table 'CheckDishes'
+ALTER TABLE [dbo].[CheckDishes]
+ADD CONSTRAINT [FK_CheckDishes_Dishes]
+    FOREIGN KEY ([Dishes_Id])
+    REFERENCES [dbo].[DishesSet]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_CheckDishes_Dishes'
+CREATE INDEX [IX_FK_CheckDishes_Dishes]
+ON [dbo].[CheckDishes]
+    ([Dishes_Id]);
 GO
 
 -- --------------------------------------------------

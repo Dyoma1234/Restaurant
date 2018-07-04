@@ -61,5 +61,13 @@ namespace restaurant_manager
         {
             return pwb2.Password;
         }
+
+       
+
+        public void ClearPassword()
+        {
+            pwb1.Password = string.Empty;
+            pwb2.Password = string.Empty;
+        }
     }
 }

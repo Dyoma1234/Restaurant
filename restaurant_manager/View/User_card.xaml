@@ -145,7 +145,7 @@
 
                 VerticalAlignment="Center" Foreground="White"></TextBlock>
                 </Grid>
-                <TextBox Text="{Binding SecretWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" VerticalAlignment="Center" Margin="15,0" materialDesign:HintAssist.Hint="Сикретное слово" materialDesign:HintAssist.IsFloating="True" materialDesign:HintAssist.HintOpacity="0.3"></TextBox>
+                <TextBox Text="{Binding SecretWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" VerticalAlignment="Center" Margin="15,0" materialDesign:HintAssist.Hint="Секретное слово" materialDesign:HintAssist.IsFloating="True" materialDesign:HintAssist.HintOpacity="0.3"></TextBox>
                 <PasswordBox x:Name="pwb1" Grid.Row="2" VerticalAlignment="Center" Margin="15,0" materialDesign:HintAssist.Hint="Новый пароль" materialDesign:HintAssist.IsFloating="True" materialDesign:HintAssist.HintOpacity="0.3">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="PasswordChanged">
@@ -162,7 +162,7 @@
                     </i:Interaction.Triggers>
                 </PasswordBox>
 
-                <Button  Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="15,5" MinWidth="95" Click="Button_Click">Отмена</Button>
+                <Button Command="{Binding CloseResetCommand}" Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="15,5" MinWidth="95" >Отмена</Button>
                 <Button Command="{Binding ResetCommand}"  CommandParameter= "2" Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15,5" MinWidth="95" >Сбросить</Button>
 
             </Grid>

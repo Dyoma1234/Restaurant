@@ -358,19 +358,19 @@ namespace restaurant_manager.ViewModel
         }
         private async void DelProduct(object obj)
         {
-
-            if (MessageBox.Show("Вы действительно хотите удалить продукт(ы) ?", "Удаление продуктов", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Question) == MessageBoxResult.Yes)
+            TableVisible = true;
+            if (WpfMessageBox.Show("Удаление продуктов", "Вы действительно хотите удалить продукт(ы) ?",  System.Windows.MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
             {
                 Loading.Invoke(obj, null);
                 await Task.Run(() =>
                {
                  List<Product> col=  ListProduct.Where(item => item.IsSelected == true).ToList();
-                   ListProduct.RemoveAll(item => item.IsSelected == true);
-                   foreach (Product item in col)
-                   {
-                       _model.db.ProductSet.Remove(item);
+                   _model.db.ProductSet.RemoveRange(col);
+                   _model.db.SaveChanges();
+                   ListProduct=_model.db.ProductSet.ToList();
+                  
 
-                   }
+                   
                    _waitHandle.Set();
 
                });
@@ -379,6 +379,7 @@ namespace restaurant_manager.ViewModel
                 UpdateEv?.Invoke(obj, null);
                 Loading?.Invoke(obj, null);
             }
+            TableVisible = false;
         }
         private bool CanSearch(object obj)
         {

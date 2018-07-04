@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Windows;
 using restaurant_manager.Interfaces;
+using System.Text.RegularExpressions;
 namespace restaurant_manager.ViewModel
 {
     class AddUserViewModel:BaseViewMode
@@ -22,6 +23,7 @@ namespace restaurant_manager.ViewModel
         private string _password_f;
         private string _password_s;
         private string _cur_posstr;
+        private string _secretword;
         public Staff_Pos _cur_pos;
         public List<Staff_Pos> Pos { set; get; }
         public Staff_Pos Cur_pos { set { _cur_pos = value; OnPropertyChanged(new PropertyChangedEventArgs("Cur_pos")); } get => _cur_pos; }
@@ -89,6 +91,18 @@ namespace restaurant_manager.ViewModel
                 OnPropertyChanged(new PropertyChangedEventArgs("Login"));
             }
         }
+        public string SecretWord
+        {
+            set
+            {
+                _secretword = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("SecretWord"));
+            }
+            get
+            {
+                return _secretword;
+            }
+        }
         public string Password_f
         {
             get
@@ -133,6 +147,7 @@ namespace restaurant_manager.ViewModel
 
         private bool CanAddUser(object obj)
         {
+
             if (string.IsNullOrWhiteSpace(_name))
                 return false;
             if (string.IsNullOrWhiteSpace(_surname))
@@ -140,6 +155,8 @@ namespace restaurant_manager.ViewModel
             if (string.IsNullOrWhiteSpace(_phone))
                 return false;
             if (string.IsNullOrWhiteSpace(_login))
+                return false;
+            if (string.IsNullOrWhiteSpace(_secretword))
                 return false;
             if (string.IsNullOrWhiteSpace(_password_f))
                 return false;
@@ -155,6 +172,12 @@ namespace restaurant_manager.ViewModel
                 return false;
             if (_password_f != _password_s)
                 return false;
+            string pattern = @"^\+\d{2}\(\d{3}\)\d{3}-\d{2}-\d{2}$";
+            Regex rgx = new Regex(pattern);
+            Match match = rgx.Match(_phone);
+            if (!match.Success)
+                return false;
+
             return true;
         }
 
@@ -170,6 +193,7 @@ namespace restaurant_manager.ViewModel
                 temp.LastName = _surname;
                 temp.login = _login;
                 temp.password = hashing.HashPassword(Password_f);
+                temp.secret_word = hashing.HashPassword(SecretWord);
                 temp.phone_number = _phone;
                 temp.Staff_Pos = Cur_pos;
                 temp.Staff_PosId = Cur_pos.Id;
@@ -200,6 +224,7 @@ namespace restaurant_manager.ViewModel
             Email = string.Empty;
             Phone = string.Empty;
             Login = string.Empty;
+            SecretWord = string.Empty;
             Password_f = string.Empty;
             Password_s = string.Empty;
 

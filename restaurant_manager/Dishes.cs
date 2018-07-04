@@ -18,7 +18,6 @@ namespace restaurant_manager
         public Dishes()
         {
             this.Formula = new HashSet<Formula>();
-            this.Order_Dishes = new HashSet<Order_Dishes>();
             this.ProductSet = new HashSet<Product>();
         }
     
@@ -32,8 +31,6 @@ namespace restaurant_manager
         public virtual Dishes_categories Dishes_categories { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Formula> Formula { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Order_Dishes> Order_Dishes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product> ProductSet { get; set; }
     }

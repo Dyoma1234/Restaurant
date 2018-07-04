@@ -12,12 +12,22 @@ namespace restaurant_manager
     using System;
     using System.Collections.Generic;
     
-    public partial class Order_Dishes
+    public partial class Check
     {
-        public int Id { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Check()
+        {
+            this.Dishes = new HashSet<Dishes>();
+        }
     
-        public virtual Ready_Dishes Ready_Dishes { get; set; }
-        public virtual Dishes Dishes { get; set; }
+        public int Id { get; set; }
+        public System.DateTime Date { get; set; }
+        public int StaffId { get; set; }
+        public int TablesId { get; set; }
+    
+        public virtual Staff Staff { get; set; }
         public virtual Tables Tables { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Dishes> Dishes { get; set; }
     }
 }

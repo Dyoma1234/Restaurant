@@ -42,6 +42,19 @@ namespace restaurant_manager.ViewModel
         private string _type;
         private List<Product_category> _categories;
         private Product_category _cur_cat;
+        private string _Cur_catstr;
+        public string Cur_catstr
+        {
+            set
+            {
+                _Cur_catstr = value;
+                OnPropertyChanged(new System.ComponentModel.PropertyChangedEventArgs("Cur_catstr"));
+            }
+            get
+            {
+                return _Cur_catstr;
+            }
+        }
         public string Name
         {
             set
@@ -100,7 +113,7 @@ namespace restaurant_manager.ViewModel
             Count = string.Empty;
             Cur_cat = null;
             Type = string.Empty;
-
+            Cur_catstr = string.Empty;
         }
         public AddNewProductViewModel()
         {
@@ -118,7 +131,8 @@ namespace restaurant_manager.ViewModel
 
             if (string.IsNullOrWhiteSpace(_type))
                 return false;
-
+            if (string.IsNullOrWhiteSpace(_Cur_catstr))
+                return false;
             return true;
         }
         private async void Save(object obj)

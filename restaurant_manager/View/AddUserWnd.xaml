@@ -8,7 +8,7 @@
         xmlns:domain="clr-namespace:restaurant_manager.domain"
         mc:Ignorable="d"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        Title="Добавить нового сотрудника" Height="480" Width="380"
+        Title="Добавить нового сотрудника" Height="520" Width="380"
            TextElement.Foreground="{DynamicResource MaterialDesignBody}"
      TextElement.FontWeight="Regular"
      TextElement.FontSize="13"
@@ -30,6 +30,7 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
 
             <RowDefinition/>
             <RowDefinition/>
@@ -38,7 +39,7 @@
             <TextBox.Text>
                 <Binding Path="Name" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
                     <Binding.ValidationRules>
-                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"  ValidationStep="UpdatedValue"/>
                     </Binding.ValidationRules>
                 </Binding>
             </TextBox.Text>
@@ -47,7 +48,7 @@
             <TextBox.Text>
                 <Binding Path="Surname" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
                     <Binding.ValidationRules>
-                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"  ValidationStep="UpdatedValue"/>
                     </Binding.ValidationRules>
                 </Binding>
             </TextBox.Text>
@@ -61,7 +62,7 @@
             <ComboBox.Text>
                 <Binding Path="Cur_posStr" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
                     <Binding.ValidationRules>
-                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"  ValidationStep="UpdatedValue"/>
                     </Binding.ValidationRules>
                 </Binding>
             </ComboBox.Text>
@@ -70,8 +71,8 @@
             <TextBox.Text>
                 <Binding Path="Phone" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
                     <Binding.ValidationRules>
-                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
-                        <domain:PhoneNumberValidation ValidatesOnTargetUpdated="True"/>
+                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"  ValidationStep="UpdatedValue"/>
+                        <domain:PhoneNumberValidation ValidatesOnTargetUpdated="True" ValidationStep="UpdatedValue"/>
 
                     </Binding.ValidationRules>
                 </Binding>
@@ -81,12 +82,21 @@
             <TextBox.Text>
                 <Binding Path="Login" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
                     <Binding.ValidationRules>
-                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"  ValidationStep="UpdatedValue"/>
                     </Binding.ValidationRules>
                 </Binding>
             </TextBox.Text>
         </TextBox>
-        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Vertical" VerticalAlignment="Center" Margin="0">
+        <TextBox Grid.Row="5"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Секрктное слово" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4" VerticalAlignment="Center">
+            <TextBox.Text>
+                <Binding Path="SecretWord" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
+                    <Binding.ValidationRules>
+                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"  ValidationStep="UpdatedValue"/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+        <StackPanel Grid.Row="6" Grid.ColumnSpan="2" Orientation="Vertical" VerticalAlignment="Center" Margin="0">
         <PasswordBox x:Name="Fpwb" Grid.Row="5"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Пароль" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4" VerticalAlignment="Top" PasswordChanged="Fpwb_PasswordChanged">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="PasswordChanged">
@@ -96,7 +106,7 @@
         </PasswordBox>
             <TextBlock x:Name="FpwbMsg" Visibility="Visible" FontSize="10" Margin="3,3,0,-7" VerticalAlignment="Top" Foreground="#DDFF0000" >Это поле должно быть заплнено.</TextBlock>
         </StackPanel>
-        <StackPanel Grid.Row="6" Grid.ColumnSpan="2">
+        <StackPanel Grid.Row="7" Grid.ColumnSpan="2">
         <PasswordBox x:Name="Spwb" Grid.Row="6"  Grid.Column="0" Grid.ColumnSpan="2"  materialDesign:HintAssist.Hint="Повторить пароль" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4" VerticalAlignment="Center" PasswordChanged="Spwb_PasswordChanged">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="PasswordChanged">
@@ -106,8 +116,8 @@
         </PasswordBox>
             <TextBlock x:Name="SpwbMsg" Visibility="Visible" FontSize="10" Margin="3,3,0,-7" Foreground="#DDFF0000" >Это поле должно быть заплнено.</TextBlock>
         </StackPanel>
-        <Button Grid.Row="7" Grid.Column="0" Margin="15,10"  Command="{Binding AddNewUserCommand}" CommandParameter="{Binding ElementName=wnd}" >Сохранить</Button>
-        <Button Grid.Row="7" Grid.Column="1" Margin="15, 10" Click="Button_Click"  >Отмена</Button>
+        <Button Grid.Row="8" Grid.Column="0" Margin="15,10"  Command="{Binding AddNewUserCommand}" CommandParameter="{Binding ElementName=wnd}" >Сохранить</Button>
+        <Button Grid.Row="8" Grid.Column="1" Margin="15, 10" Click="Button_Click"  >Отмена</Button>
 
     </Grid>
 </Window>

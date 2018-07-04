@@ -83,13 +83,13 @@ namespace restaurant_manager.ViewModel
                         {
 
 
-                            Cur_session.New_session(item.Id, item.login, item.password, item.FirstName, item.LastName, item.Staff_Pos.Position, item.phone_number);
+                            Cur_session.New_session(item.Staff_PosId, item.login, item.password, item.FirstName, item.LastName, item.Staff_Pos.Position, item.phone_number);
                             _waitHandle.Set();
 
                             break;
                         }
                     }
-                    _waitHandle.Set();
+                _waitHandle.Set();
             });
 
             _waitHandle.WaitOne();
@@ -99,11 +99,22 @@ namespace restaurant_manager.ViewModel
                 LoadVisible = false;
                 return;
             }
-            LoadVisible = false;
-            _waitHandle.Close();
-            AdminWnd adminWnd = new AdminWnd();
-            adminWnd.Show();
-            temp_obj.Close();
+            if (Cur_session.Id == 1)
+            {
+                LoadVisible = false;
+                _waitHandle.Close();
+                AdminWnd adminWnd = new AdminWnd();
+                adminWnd.Show();
+                temp_obj.Close();
+            }
+            if (Cur_session.Id == 3)
+            {
+                LoadVisible = false;
+                _waitHandle.Close();
+                WaiterWnd waiterWnd = new WaiterWnd();
+                waiterWnd.Show();
+                temp_obj.Close();
+            }
         }
         private bool CanMainWindowShow(object obj)
         {

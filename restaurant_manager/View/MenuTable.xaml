@@ -124,7 +124,7 @@
                     <TextBox.Text>
                         <Binding Path="AddNewName" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
-                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" ValidationStep="UpdatedValue"/>
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox.Text>
@@ -134,7 +134,7 @@
                     <ComboBox.Text>
                         <Binding Path="AddNewCat" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
-                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" ValidationStep="UpdatedValue"/>
                             </Binding.ValidationRules>
                         </Binding>
                     </ComboBox.Text>
@@ -143,7 +143,7 @@
                     <TextBox.Text>
                         <Binding Path="AddNewWeight" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
-                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                                <domain:NotEmptyValidationRule ValidationStep="UpdatedValue" ValidatesOnTargetUpdated="True"/>
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox.Text>
@@ -152,7 +152,7 @@
                     <TextBox.Text>
                         <Binding Path="AddNewPric" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
-                                <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                                <domain:NotEmptyValidationRule ValidationStep="UpdatedValue" ValidatesOnTargetUpdated="True"/>
                             </Binding.ValidationRules>
                         </Binding>
                     </TextBox.Text>

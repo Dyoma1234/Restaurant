@@ -11,6 +11,12 @@ namespace restaurant_manager
             _canExecute = canExecute;
         }
 
+        public DelegateCommand(ICommand clearCurCheck, object p)
+        {
+            this.clearCurCheck = clearCurCheck;
+            this.p = p;
+        }
+
         public bool CanExecute(object parameter)
         {
             return _canExecute != null ? _canExecute(parameter) : true;
@@ -29,5 +35,7 @@ namespace restaurant_manager
 
         Action<object> _execute;
         Predicate<object> _canExecute;
+        private ICommand clearCurCheck;
+        private object p;
     }
 }

@@ -526,7 +526,7 @@ namespace restaurant_manager.ViewModel
                     _model.db.DishesSet.Add(SelectedItem);
                     _model.db.SaveChanges();
                 }
-                //
+                
             }
         }
 
@@ -542,6 +542,7 @@ namespace restaurant_manager.ViewModel
             AddNewDish = false ;
             AddVisible = false;
             NotFound = false;
+            AddNewPric = string.Empty;
 
         }
     }

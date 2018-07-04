@@ -481,11 +481,7 @@ namespace restaurant_manager.ViewModel
         {
 
             Guests guests = _model.db.GuestsSet.Where(i => i.PhoneNumber == AddPhone).FirstOrDefault();
-            if (guests != null)
-            {
-                _model.db.GuestsSet.Remove(guests);
-                _model.db.SaveChanges();
-            }
+           
             if (guests == null)
             {
                 guests = new Guests();
@@ -494,7 +490,8 @@ namespace restaurant_manager.ViewModel
                 _model.db.GuestsSet.Add(guests);
             }
             guests.FullName = AddFullName;
-            _model.db.GuestsSet.Add(guests);
+            _model.db.SaveChanges();
+
             Reservation reservation = new Reservation();
             reservation.GuestsSet = guests;
             reservation.TablesSet = AddSelected_Table;
@@ -513,6 +510,20 @@ namespace restaurant_manager.ViewModel
 
         private bool CanSaveEdit(object obj)
         {
+            string pattern = @"^\+\d{2}\(\d{3}\)\d{3}-\d{2}-\d{2}$";
+            Regex rgx = new Regex(pattern);
+            Match match = rgx.Match(EditPhone);
+            if (!match.Success)
+                return false;
+
+            if (string.IsNullOrWhiteSpace(_editfullname))
+                return false;
+            if (string.IsNullOrWhiteSpace(_editphone))
+                return false;
+            if (_editdate == null)
+                return false;
+            if (_edittable < 1 || _edittable > 8)
+                return false;
             if (Cur_Item != null && _old_cur_item != null)
             {
                 if (EditTable != _old_cur_item.TablesSet.Num ||
@@ -524,7 +535,7 @@ namespace restaurant_manager.ViewModel
                     {
                         return false;
                     }
-                    return true;
+                   return true;
                 }
             }
 
@@ -616,6 +627,7 @@ namespace restaurant_manager.ViewModel
             TbList = _model.db.TablesSet.ToList();
              SelectTableIndex = -1;
             AddPhone = string.Empty;
+            EditPhone = string.Empty;
         }
 
     }

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:restaurant_manager.View"
+        xmlns:domain ="clr-namespace:restaurant_manager.domain"
         mc:Ignorable="d"
         Title="Добавить новые продукты" Height="420" Width="320"
          TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -13,6 +14,8 @@
      TextOptions.TextFormattingMode="Ideal"
      TextOptions.TextRenderingMode="Auto"
         x:Name="wnd"
+        Language="ru-ru"
+        xml:lang="ru-RU"
      Background="{DynamicResource MaterialDesignPaper}"
      FontFamily="{DynamicResource MaterialDesignFont}" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Icon="/restaurant_manager;component/chef.png">
 
@@ -24,18 +27,49 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBox Grid.Row="0" Margin="30,0" materialDesign:HintAssist.Hint="Название" materialDesign:HintAssist.IsFloating="True" materialDesign:HintAssist.HintOpacity="0.4" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"></TextBox>
+        <TextBox Grid.Row="0" Margin="30,0" materialDesign:HintAssist.Hint="Название" materialDesign:HintAssist.IsFloating="True" materialDesign:HintAssist.HintOpacity="0.4"  VerticalAlignment="Center">
+            <TextBox.Text>
+                <Binding Path="Name" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
+                    <Binding.ValidationRules>
+                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"  ValidationStep="UpdatedValue"/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
         <ComboBox Grid.Row="1" Margin="30,0" materialDesign:HintAssist.Hint="Категория" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4"
                                   ItemsSource="{Binding Path=Categories}"
                                   SelectedItem="{Binding Path=Cur_cat}"
                                   DisplayMemberPath="Name" 
-                                  SelectedValuePath="Name" VerticalAlignment="Center"/>
-        <TextBox  Grid.Row="2" Margin="30,0" materialDesign:HintAssist.Hint="Количество" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4" Text="{Binding Count,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" PreviewTextInput="TextBox_PreviewTextInput_1"/>
-        <ComboBox Grid.Row="3" Margin="30,0"  materialDesign:HintAssist.Hint="Единицы" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4"   IsEditable="True"   Text="{Binding Type , Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center">
+                                  SelectedValuePath="Name" VerticalAlignment="Center">
+            <ComboBox.Text>
+                <Binding Path="Cur_catstr" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
+                    <Binding.ValidationRules>
+                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"  ValidationStep="UpdatedValue"/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </ComboBox.Text>
+        </ComboBox>
+        <TextBox  Grid.Row="2" Margin="30,0" materialDesign:HintAssist.Hint="Количество" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4"  VerticalAlignment="Center" PreviewTextInput="TextBox_PreviewTextInput_1">
+            <TextBox.Text>
+                <Binding Path="Count" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
+                    <Binding.ValidationRules>
+                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"  ValidationStep="UpdatedValue"/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+        <ComboBox Grid.Row="3" Margin="30,0"  materialDesign:HintAssist.Hint="Единицы" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4"   IsEditable="True"    VerticalAlignment="Center">
                 <ComboBoxItem>кг.</ComboBoxItem>
                 <ComboBoxItem>шт.</ComboBoxItem>
                 <ComboBoxItem>л.</ComboBoxItem>
-          </ComboBox>
+            <ComboBox.Text>
+                <Binding Path="Type" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" >
+                    <Binding.ValidationRules>
+                        <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"  ValidationStep="UpdatedValue"/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </ComboBox.Text>
+        </ComboBox>
         <Grid  Grid.Row="4">
             <Button Width="120" HorizontalAlignment="Right" Click="Button_Click" Margin="15,0">Отмена</Button>
             <Button Width="120" HorizontalAlignment="Left" Command="{Binding SaveCommand}" Margin="15,0">Сохранить</Button>

@@ -112,5 +112,11 @@ namespace restaurant_manager
 
             }
         }
+
+        public void ClearPassword()
+        {
+            Fpwb.Password = string.Empty;
+            Spwb.Password = string.Empty;
+        }
     }
 }

@@ -13,20 +13,17 @@
     <EntitySet Name="ReservationSet" EntityType="Model1.Store.ReservationSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Staff_PosSet" EntityType="Model1.Store.Staff_PosSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="StaffSet" EntityType="Model1.Store.StaffSet" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Order_DishesSet" EntityType="Model1.Store.Order_DishesSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Ready_DishesSet" EntityType="Model1.Store.Ready_DishesSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="sysdiagrams" EntityType="Model1.Store.sysdiagrams" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Dishes_categoriesSet" EntityType="Model1.Store.Dishes_categoriesSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="FormulaSet" EntityType="Model1.Store.FormulaSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="TablesSet" EntityType="Model1.Store.TablesSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="CheckSet" EntityType="Model1.Store.CheckSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ProductDishes" EntityType="Model1.Store.ProductDishes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="CheckDishes" EntityType="Model1.Store.CheckDishes" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="Product_categoryProduct" Association="Model1.Store.Product_categoryProduct">
       <End Role="Product_category" EntitySet="Product_categorySet" />
       <End Role="Product" EntitySet="ProductSet" />
-    </AssociationSet>
-    <AssociationSet Name="Ready_DishesOrder_Dishes" Association="Model1.Store.Ready_DishesOrder_Dishes">
-      <End Role="Ready_Dishes" EntitySet="Ready_DishesSet" />
-      <End Role="Order_Dishes" EntitySet="Order_DishesSet" />
     </AssociationSet>
     <AssociationSet Name="Staff_PosStaff" Association="Model1.Store.Staff_PosStaff">
       <End Role="Staff_Pos" EntitySet="Staff_PosSet" />
@@ -44,10 +41,6 @@
       <End Role="Product" EntitySet="ProductSet" />
       <End Role="Formula" EntitySet="FormulaSet" />
     </AssociationSet>
-    <AssociationSet Name="Order_DishesDishes" Association="Model1.Store.Order_DishesDishes">
-      <End Role="Order_Dishes" EntitySet="Order_DishesSet" />
-      <End Role="Dishes" EntitySet="DishesSet" />
-    </AssociationSet>
     <AssociationSet Name="FK_ProductDishes_Dishes" Association="Model1.Store.FK_ProductDishes_Dishes">
       <End Role="Dishes" EntitySet="DishesSet" />
       <End Role="ProductDishes" EntitySet="ProductDishes" />
@@ -56,10 +49,6 @@
       <End Role="Product" EntitySet="ProductSet" />
       <End Role="ProductDishes" EntitySet="ProductDishes" />
     </AssociationSet>
-    <AssociationSet Name="Order_DishesTables" Association="Model1.Store.Order_DishesTables">
-      <End Role="Order_Dishes" EntitySet="Order_DishesSet" />
-      <End Role="Tables" EntitySet="TablesSet" />
-    </AssociationSet>
     <AssociationSet Name="FK_ReservationGuests" Association="Model1.Store.FK_ReservationGuests">
       <End Role="Guests" EntitySet="GuestsSet" />
       <End Role="Reservation" EntitySet="ReservationSet" />
@@ -67,6 +56,26 @@
     <AssociationSet Name="FK_ReservationTables" Association="Model1.Store.FK_ReservationTables">
       <End Role="Tables" EntitySet="TablesSet" />
       <End Role="Reservation" EntitySet="ReservationSet" />
+    </AssociationSet>
+    <AssociationSet Name="CheckStaff" Association="Model1.Store.CheckStaff">
+      <End Role="Check" EntitySet="CheckSet" />
+      <End Role="Staff" EntitySet="StaffSet" />
+    </AssociationSet>
+    <AssociationSet Name="Ready_DishesCheck" Association="Model1.Store.Ready_DishesCheck">
+      <End Role="Ready_Dishes" EntitySet="Ready_DishesSet" />
+      <End Role="Check" EntitySet="CheckSet" />
+    </AssociationSet>
+    <AssociationSet Name="CheckTables" Association="Model1.Store.CheckTables">
+      <End Role="Check" EntitySet="CheckSet" />
+      <End Role="Tables" EntitySet="TablesSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CheckDishes_Check" Association="Model1.Store.FK_CheckDishes_Check">
+      <End Role="Check" EntitySet="CheckSet" />
+      <End Role="CheckDishes" EntitySet="CheckDishes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CheckDishes_Dishes" Association="Model1.Store.FK_CheckDishes_Dishes">
+      <End Role="Dishes" EntitySet="DishesSet" />
+      <End Role="CheckDishes" EntitySet="CheckDishes" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="ProductSet">
@@ -135,20 +144,12 @@
     <Property Name="phone_number" Type="nvarchar(max)" Nullable="true" />
     <Property Name="secret_word" Type="nvarchar(max)" Nullable="true" />
   </EntityType>
-  <EntityType Name="Order_DishesSet">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Ready_Dishes_Id" Type="int" Nullable="false" />
-    <Property Name="Dishes_Id" Type="int" Nullable="false" />
-    <Property Name="Tables_Id" Type="int" Nullable="false" />
-  </EntityType>
   <EntityType Name="Ready_DishesSet">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CheckId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="sysdiagrams">
     <Key>
@@ -183,6 +184,15 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Num" Type="int" Nullable="true" />
   </EntityType>
+  <EntityType Name="CheckSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="StaffId" Type="int" Nullable="false" />
+    <Property Name="TablesId" Type="int" Nullable="false" />
+  </EntityType>
   <EntityType Name="ProductDishes">
     <Key>
       <PropertyRef Name="DishesSet_Id" />
@@ -190,6 +200,14 @@
     </Key>
     <Property Name="DishesSet_Id" Type="int" Nullable="false" />
     <Property Name="ProductSet_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CheckDishes">
+    <Key>
+      <PropertyRef Name="CheckDishes_Dishes_Id" />
+      <PropertyRef Name="Dishes_Id" />
+    </Key>
+    <Property Name="CheckDishes_Dishes_Id" Type="int" Nullable="false" />
+    <Property Name="Dishes_Id" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="Product_categoryProduct">
     <End Role="Product_category" Type="Model1.Store.Product_categorySet" Multiplicity="1" />
@@ -200,18 +218,6 @@
       </Principal>
       <Dependent Role="Product">
         <PropertyRef Name="Product_categoryId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="Ready_DishesOrder_Dishes">
-    <End Role="Ready_Dishes" Type="Model1.Store.Ready_DishesSet" Multiplicity="1" />
-    <End Role="Order_Dishes" Type="Model1.Store.Order_DishesSet" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Ready_Dishes">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Order_Dishes">
-        <PropertyRef Name="Ready_Dishes_Id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -263,30 +269,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="Order_DishesDishes">
-    <End Role="Order_Dishes" Type="Model1.Store.Order_DishesSet" Multiplicity="*" />
-    <End Role="Dishes" Type="Model1.Store.DishesSet" Multiplicity="1" />
-    <ReferentialConstraint>
-      <Principal Role="Dishes">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Order_Dishes">
-        <PropertyRef Name="Dishes_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="Order_DishesTables">
-    <End Role="Order_Dishes" Type="Model1.Store.Order_DishesSet" Multiplicity="*" />
-    <End Role="Tables" Type="Model1.Store.TablesSet" Multiplicity="1" />
-    <ReferentialConstraint>
-      <Principal Role="Tables">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Order_Dishes">
-        <PropertyRef Name="Tables_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_ReservationGuests">
     <End Role="Guests" Type="Model1.Store.GuestsSet" Multiplicity="1" />
     <End Role="Reservation" Type="Model1.Store.ReservationSet" Multiplicity="*" />
@@ -308,6 +290,42 @@
       </Principal>
       <Dependent Role="Reservation">
         <PropertyRef Name="Tables_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CheckStaff">
+    <End Role="Check" Type="Model1.Store.CheckSet" Multiplicity="*" />
+    <End Role="Staff" Type="Model1.Store.StaffSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Staff">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Check">
+        <PropertyRef Name="StaffId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Ready_DishesCheck">
+    <End Role="Ready_Dishes" Type="Model1.Store.Ready_DishesSet" Multiplicity="*" />
+    <End Role="Check" Type="Model1.Store.CheckSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Check">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Ready_Dishes">
+        <PropertyRef Name="CheckId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CheckTables">
+    <End Role="Check" Type="Model1.Store.CheckSet" Multiplicity="*" />
+    <End Role="Tables" Type="Model1.Store.TablesSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Tables">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Check">
+        <PropertyRef Name="TablesId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -335,6 +353,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_CheckDishes_Check">
+    <End Role="Check" Type="Model1.Store.CheckSet" Multiplicity="1" />
+    <End Role="CheckDishes" Type="Model1.Store.CheckDishes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Check">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CheckDishes">
+        <PropertyRef Name="CheckDishes_Dishes_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CheckDishes_Dishes">
+    <End Role="CheckDishes" Type="Model1.Store.CheckDishes" Multiplicity="*" />
+    <End Role="Dishes" Type="Model1.Store.DishesSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Dishes">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CheckDishes">
+        <PropertyRef Name="Dishes_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -351,12 +393,7 @@
           <EntitySet Name="ReservationSet" EntityType="Model1.Reservation" />
           <EntitySet Name="Staff_PosSet" EntityType="Model1.Staff_Pos" />
           <EntitySet Name="StaffSet" EntityType="Model1.Staff" />
-          <EntitySet Name="Order_DishesSet" EntityType="Model1.Order_Dishes" />
           <EntitySet Name="Ready_DishesSet" EntityType="Model1.Ready_Dishes" />
-          <AssociationSet Name="Ready_DishesOrder_Dishes" Association="Model1.Ready_DishesOrder_Dishes">
-            <End Role="Ready_Dishes" EntitySet="Ready_DishesSet" />
-            <End Role="Order_Dishes" EntitySet="Order_DishesSet" />
-          </AssociationSet>
           <EntitySet Name="sysdiagrams" EntityType="Model1.sysdiagrams" />
           <AssociationSet Name="Staff_PosStaff" Association="Model1.Staff_PosStaff">
             <End Role="Staff_Pos" EntitySet="Staff_PosSet" />
@@ -376,19 +413,11 @@
             <End Role="Product" EntitySet="ProductSet" />
             <End Role="Formula" EntitySet="FormulaSet" />
           </AssociationSet>
-          <AssociationSet Name="Order_DishesDishes" Association="Model1.Order_DishesDishes">
-            <End Role="Order_Dishes" EntitySet="Order_DishesSet" />
-            <End Role="Dishes" EntitySet="DishesSet" />
-          </AssociationSet>
           <AssociationSet Name="ProductDishes" Association="Model1.ProductDishes">
             <End Role="Dishes" EntitySet="DishesSet" />
             <End Role="Product" EntitySet="ProductSet" />
           </AssociationSet>
           <EntitySet Name="TablesSet" EntityType="Model1.Tables" />
-          <AssociationSet Name="Order_DishesTables" Association="Model1.Order_DishesTables">
-            <End Role="Order_Dishes" EntitySet="Order_DishesSet" />
-            <End Role="Tables" EntitySet="TablesSet" />
-          </AssociationSet>
           <AssociationSet Name="FK_ReservationGuests" Association="Model1.FK_ReservationGuests">
             <End Role="Guests" EntitySet="GuestsSet" />
             <End Role="Reservation" EntitySet="ReservationSet" />
@@ -396,6 +425,23 @@
           <AssociationSet Name="FK_ReservationTables" Association="Model1.FK_ReservationTables">
             <End Role="Tables" EntitySet="TablesSet" />
             <End Role="Reservation" EntitySet="ReservationSet" />
+          </AssociationSet>
+          <EntitySet Name="CheckSet" EntityType="Model1.Check" />
+          <AssociationSet Name="CheckStaff" Association="Model1.CheckStaff">
+            <End Role="Check" EntitySet="CheckSet" />
+            <End Role="Staff" EntitySet="StaffSet" />
+          </AssociationSet>
+          <AssociationSet Name="Ready_DishesCheck" Association="Model1.Ready_DishesCheck">
+            <End Role="Ready_Dishes" EntitySet="Ready_DishesSet" />
+            <End Role="Check" EntitySet="CheckSet" />
+          </AssociationSet>
+          <AssociationSet Name="CheckTables" Association="Model1.CheckTables">
+            <End Role="Check" EntitySet="CheckSet" />
+            <End Role="Tables" EntitySet="TablesSet" />
+          </AssociationSet>
+          <AssociationSet Name="CheckDishes" Association="Model1.CheckDishes">
+            <End Role="Check" EntitySet="CheckSet" />
+            <End Role="Dishes" EntitySet="DishesSet" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Product">
@@ -443,7 +489,6 @@
           <Property Name="Dishes_categoriesId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Formula" Relationship="Model1.DishesFormula" FromRole="Dishes" ToRole="Formula" />
           <Property Name="Weight" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="Order_Dishes" Relationship="Model1.Order_DishesDishes" FromRole="Dishes" ToRole="Order_Dishes" />
           <NavigationProperty Name="ProductSet" Relationship="Model1.ProductDishes" FromRole="Dishes" ToRole="Product" />
           <Property Name="IsSelected" Type="Boolean" />
         </EntityType>
@@ -488,27 +533,16 @@
           <Property Name="Staff_PosId" Type="Int32" Nullable="false" />
           <Property Name="phone_number" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="secret_word" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Order_Dishes">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="Ready_Dishes" Relationship="Model1.Ready_DishesOrder_Dishes" FromRole="Order_Dishes" ToRole="Ready_Dishes" />
-          <NavigationProperty Name="Dishes" Relationship="Model1.Order_DishesDishes" FromRole="Order_Dishes" ToRole="Dishes" />
-          <NavigationProperty Name="Tables" Relationship="Model1.Order_DishesTables" FromRole="Order_Dishes" ToRole="Tables" />
+          <NavigationProperty Name="Check" Relationship="Model1.CheckStaff" FromRole="Staff" ToRole="Check" />
         </EntityType>
         <EntityType Name="Ready_Dishes">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="Order_Dishes" Relationship="Model1.Ready_DishesOrder_Dishes" FromRole="Ready_Dishes" ToRole="Order_Dishes" />
+          <NavigationProperty Name="Check" Relationship="Model1.Ready_DishesCheck" FromRole="Ready_Dishes" ToRole="Check" />
+          <Property Name="CheckId" Type="Int32" Nullable="false" />
         </EntityType>
-        <Association Name="Ready_DishesOrder_Dishes">
-          <End Type="Model1.Ready_Dishes" Role="Ready_Dishes" Multiplicity="1" />
-          <End Type="Model1.Order_Dishes" Role="Order_Dishes" Multiplicity="*" />
-        </Association>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -585,10 +619,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Order_DishesDishes">
-          <End Type="Model1.Order_Dishes" Role="Order_Dishes" Multiplicity="*" />
-          <End Type="Model1.Dishes" Role="Dishes" Multiplicity="1" />
-        </Association>
         <Association Name="ProductDishes">
           <End Type="Model1.Dishes" Role="Dishes" Multiplicity="*" />
           <End Type="Model1.Product" Role="Product" Multiplicity="*" />
@@ -598,14 +628,9 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="Order_Dishes" Relationship="Model1.Order_DishesTables" FromRole="Tables" ToRole="Order_Dishes" />
           <Property Name="Num" Type="Int32" />
           <NavigationProperty Name="ReservationSet" Relationship="Model1.FK_ReservationTables" FromRole="Tables" ToRole="Reservation" />
         </EntityType>
-        <Association Name="Order_DishesTables">
-          <End Type="Model1.Order_Dishes" Role="Order_Dishes" Multiplicity="*" />
-          <End Type="Model1.Tables" Role="Tables" Multiplicity="1" />
-        </Association>
         <Association Name="FK_ReservationGuests">
           <End Type="Model1.Guests" Role="Guests" Multiplicity="1" />
           <End Type="Model1.Reservation" Role="Reservation" Multiplicity="*" />
@@ -629,6 +654,58 @@
               <PropertyRef Name="Tables_Id" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Check">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Staff" Relationship="Model1.CheckStaff" FromRole="Check" ToRole="Staff" />
+          <Property Name="StaffId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Tables" Relationship="Model1.CheckTables" FromRole="Check" ToRole="Tables" />
+          <Property Name="TablesId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Dishes" Relationship="Model1.CheckDishes" FromRole="Check" ToRole="Dishes" />
+        </EntityType>
+        <Association Name="CheckStaff">
+          <End Type="Model1.Check" Role="Check" Multiplicity="*" />
+          <End Type="Model1.Staff" Role="Staff" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Staff">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Check">
+              <PropertyRef Name="StaffId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Ready_DishesCheck">
+          <End Type="Model1.Ready_Dishes" Role="Ready_Dishes" Multiplicity="*" />
+          <End Type="Model1.Check" Role="Check" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Check">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Ready_Dishes">
+              <PropertyRef Name="CheckId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CheckTables">
+          <End Type="Model1.Check" Role="Check" Multiplicity="*" />
+          <End Type="Model1.Tables" Role="Tables" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Tables">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Check">
+              <PropertyRef Name="TablesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CheckDishes">
+          <End Type="Model1.Check" Role="Check" Multiplicity="*" />
+          <End Type="Model1.Dishes" Role="Dishes" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -709,17 +786,11 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Order_DishesSet">
-      <EntityTypeMapping TypeName="IsTypeOf(Model1.Order_Dishes)">
-        <MappingFragment StoreEntitySet="Order_DishesSet">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Ready_DishesSet">
       <EntityTypeMapping TypeName="IsTypeOf(Model1.Ready_Dishes)">
         <MappingFragment StoreEntitySet="Ready_DishesSet">
           <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CheckId" ColumnName="CheckId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -760,22 +831,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="Ready_DishesOrder_Dishes" TypeName="Model1.Ready_DishesOrder_Dishes" StoreEntitySet="Order_DishesSet">
-      <EndProperty Name="Ready_Dishes">
-        <ScalarProperty Name="Id" ColumnName="Ready_Dishes_Id" />
-      </EndProperty>
-      <EndProperty Name="Order_Dishes">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="Order_DishesDishes" TypeName="Model1.Order_DishesDishes" StoreEntitySet="Order_DishesSet">
-      <EndProperty Name="Dishes">
-        <ScalarProperty Name="Id" ColumnName="Dishes_Id" />
-      </EndProperty>
-      <EndProperty Name="Order_Dishes">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
+    <EntitySetMapping Name="CheckSet">
+      <EntityTypeMapping TypeName="IsTypeOf(Model1.Check)">
+        <MappingFragment StoreEntitySet="CheckSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="StaffId" ColumnName="StaffId" />
+          <ScalarProperty Name="TablesId" ColumnName="TablesId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <AssociationSetMapping Name="ProductDishes" TypeName="Model1.ProductDishes" StoreEntitySet="ProductDishes">
       <EndProperty Name="Dishes">
         <ScalarProperty Name="Id" ColumnName="DishesSet_Id" />
@@ -784,12 +849,12 @@
         <ScalarProperty Name="Id" ColumnName="ProductSet_Id" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="Order_DishesTables" TypeName="Model1.Order_DishesTables" StoreEntitySet="Order_DishesSet">
-      <EndProperty Name="Tables">
-        <ScalarProperty Name="Id" ColumnName="Tables_Id" />
+    <AssociationSetMapping Name="CheckDishes" TypeName="Model1.CheckDishes" StoreEntitySet="CheckDishes">
+      <EndProperty Name="Check">
+        <ScalarProperty Name="Id" ColumnName="CheckDishes_Dishes_Id" />
       </EndProperty>
-      <EndProperty Name="Order_Dishes">
-        <ScalarProperty Name="Id" ColumnName="Id" />
+      <EndProperty Name="Dishes">
+        <ScalarProperty Name="Id" ColumnName="Dishes_Id" />
       </EndProperty>
     </AssociationSetMapping>
   </EntityContainerMapping>

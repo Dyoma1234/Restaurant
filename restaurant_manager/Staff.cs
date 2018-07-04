@@ -14,6 +14,12 @@ namespace restaurant_manager
     
     public partial class Staff
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Staff()
+        {
+            this.Check = new HashSet<Check>();
+        }
+    
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -24,5 +30,7 @@ namespace restaurant_manager
         public string secret_word { get; set; }
     
         public virtual Staff_Pos Staff_Pos { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Check> Check { get; set; }
     }
 }

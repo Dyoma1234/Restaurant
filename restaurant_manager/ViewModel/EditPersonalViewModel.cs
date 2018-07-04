@@ -25,7 +25,7 @@ namespace restaurant_manager.ViewModel
         private string _cur_secretword;
         public int Id { set; get; }
         private HashingPassword hashing;
-
+        private IPasswordChanget pwb;
 
 
         private string old_name;
@@ -350,6 +350,25 @@ namespace restaurant_manager.ViewModel
         private DelegateCommand _PasswordChangedCommand;
         private DelegateCommand _reset_command;
         private DelegateCommand _ShowResetCommand;
+        private DelegateCommand _CloseResetCommand;
+        public ICommand CloseResetCommand
+        {
+            get
+            {
+                if (_CloseResetCommand == null)
+                {
+                    _CloseResetCommand = new DelegateCommand(CloseReset, null);
+                }
+                return _CloseResetCommand;
+            }
+        }
+
+        private void CloseReset(object obj)
+        {
+            SecretWord = string.Empty;
+            ResetVis = false;
+            pwb?.ClearPassword();
+        }
 
         public ICommand ShowResetCommand
         {
@@ -417,7 +436,7 @@ namespace restaurant_manager.ViewModel
             var UserReset = _model.db.StaffSet.Where(i => i.Id == Id).FirstOrDefault();
             if (UserReset == null)
                 return;
-            if (UserReset.secret_word == SecretWord)
+            if (UserReset.secret_word == SecretWord ||UserReset.secret_word== hashing.HashPassword(SecretWord))
             {
                 _model.db.StaffSet.Remove(UserReset);
                 _model.db.SaveChanges();
@@ -431,6 +450,7 @@ namespace restaurant_manager.ViewModel
                 WpfMessageBox.Show("Изменение пароля", "Пароль успешно изменен.", MessageBoxType.Information);
                 DelVis?.Invoke(obj, null);
                 ResetVis = false;
+                pwb?.ClearPassword();
             }
             else
             {
@@ -443,11 +463,11 @@ namespace restaurant_manager.ViewModel
 
         private void FpChanget(object obj)
             {
-            IPasswordChanget item = (obj as IPasswordChanget);
-            if (item == null)
+            pwb = (obj as IPasswordChanget);
+            if (pwb == null)
                 return;
-            _p1 = item.GetPassword_F();
-            _p2 = item.GetPassword_S();
+            _p1 = pwb.GetPassword_F();
+            _p2 = pwb.GetPassword_S();
 
 
         }

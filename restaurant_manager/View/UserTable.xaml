@@ -32,7 +32,7 @@
   materialDesign:DataGridAssist.ColumnHeaderPadding="8">
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn
-                                 Binding="{Binding IsSelected}"
+                                 Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                      EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">
                     <DataGridCheckBoxColumn.Header>
                         <Border
@@ -80,7 +80,7 @@
             </DataGrid.Columns>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="RowEditEnding">
-                    <i:InvokeCommandAction Command="{Binding EndEdit}" />
+                    <i:InvokeCommandAction Command="{Binding EndEdit}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </DataGrid>

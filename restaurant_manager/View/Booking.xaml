@@ -198,7 +198,7 @@
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <TextBlock Margin="20,20,0,0" FontSize="16">Дата бронирования</TextBlock>
-                <wpfTool:DateTimePicker  Value="{Binding Date}" x:Name="Picker" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,45,0,0" Format="Custom"
+                <wpfTool:DateTimePicker  Value="{Binding Date , UpdateSourceTrigger=PropertyChanged}" x:Name="Picker" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,45,0,0" Format="Custom"
                      FormatString="dd/MM/yyyy"
                      TimeFormat="Custom"
                      TimeFormatString="HH:mm" Grid.ColumnSpan="2" >
@@ -226,14 +226,14 @@
                            
                             <DataGridTextColumn
                               IsReadOnly="True"
-                              Binding="{Binding GuestsSet.PhoneNumber}"
+                              Binding="{Binding GuestsSet.PhoneNumber, UpdateSourceTrigger=PropertyChanged}"
                             
                               Header="Номер"
                               EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
                             <!-- if you want to use the pop up style (MaterialDesignDataGridTextColumnPopupEditingStyle), you must use MaterialDataGridTextColumn -->
                             <materialDesign:MaterialDataGridTextColumn
                     IsReadOnly="{Binding Editmode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Binding="{Binding Time}"
+                             Binding="{Binding Time, UpdateSourceTrigger=PropertyChanged}"
                              Header="Дата"
                              MaxLength="50"
                              EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}" />
@@ -241,13 +241,13 @@
                             <!-- set a max length to get an indicator in the editor -->
                             <materialDesign:MaterialDataGridTextColumn
                             IsReadOnly="{Binding Editmode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            Binding="{Binding GuestsSet.FullName}"
+                            Binding="{Binding GuestsSet.FullName, UpdateSourceTrigger=PropertyChanged}"
                              Header="Ф.И.О."
                              MaxLength="50"
                             EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}" />
                             <materialDesign:MaterialDataGridTextColumn
                              IsReadOnly="{Binding Editmode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            Binding="{Binding TablesSet.Num}"
+                            Binding="{Binding TablesSet.Num, UpdateSourceTrigger=PropertyChanged}"
                              Header="Стол"
                              EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
 
@@ -256,10 +256,18 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </Border>
-                <Button Grid.ColumnSpan="2" Grid.Row="2" HorizontalAlignment="Right" MinWidth="100"  Grid.Column="1" Command="{Binding AddCommand}" Margin="0,5,15,5">Добавить</Button>
-                <Button Grid.ColumnSpan="2" Grid.Row="2" HorizontalAlignment="Center" MinWidth="100"  Grid.Column="0" Command="{Binding DelCommand}" Margin="0,5">Удалить</Button>
-                <Button Grid.ColumnSpan="2" Grid.Row="2" HorizontalAlignment="Left" MinWidth="100"   Command="{Binding EditCommand}" Margin="15,5,0,5">Ред.</Button>
-            </Grid>
+                <Grid Grid.ColumnSpan="2" Grid.Row="2" Margin="15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button  MinWidth="100"  Grid.Column="2" Command="{Binding AddCommand}" VerticalAlignment="Center" Height="Auto" Margin="5,0,0,0" >Добавить</Button>
+                    <Button   MinWidth="100"  Grid.Column="1" Command="{Binding DelCommand}" VerticalAlignment="Center" Height="Auto" Margin="5,0">Удалить</Button>
+                    <Button   MinWidth="100" Grid.Column="0"  Command="{Binding EditCommand}" VerticalAlignment="Center" Height="Auto" >Редактировать</Button>
+
+                </Grid>
+                </Grid>
         </Grid>
         <Grid  Background="Black" Grid.ColumnSpan="2" Opacity="0.4" Visibility="{Binding Path=BgVis ,Converter={StaticResource BoolToVisConverter}}">
         </Grid>
@@ -285,7 +293,7 @@
                 <TextBox.Text>
                     <Binding Path="AddFullName" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" >
                         <Binding.ValidationRules>
-                            <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                            <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"  ValidationStep="UpdatedValue"/>
                         </Binding.ValidationRules>
                     </Binding>
                 </TextBox.Text>
@@ -295,15 +303,15 @@
                 <TextBox.Text>
                     <Binding Path="AddPhone" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
-                            <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
-                            <domain:PhoneNumberValidation ValidatesOnTargetUpdated="True"/>
+                            <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"  ValidationStep="UpdatedValue"/>
+                            <domain:PhoneNumberValidation ValidatesOnTargetUpdated="True" ValidationStep="UpdatedValue"/>
                         </Binding.ValidationRules>
                     </Binding>
                     
                 </TextBox.Text>
                
             </TextBox>
-            <wpfTool:DateTimePicker Value="{Binding AddDate}"  Grid.Row="3" VerticalAlignment="Center" Margin="15,0">
+            <wpfTool:DateTimePicker Value="{Binding AddDate, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="3" VerticalAlignment="Center" Margin="15,0">
                 
             </wpfTool:DateTimePicker>
             <ComboBox  Grid.Row="4" Margin="15,0" materialDesign:HintAssist.Hint="Стол" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4" ItemsSource="{Binding TbList}" SelectedItem="{Binding AddSelected_Table}" DisplayMemberPath="Num" VerticalAlignment="Center">
@@ -332,10 +340,11 @@
             </Grid>
             <TextBox  Grid.Row="1" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  materialDesign:HintAssist.Hint="Ф.И.О." materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4" Margin="15,0" VerticalAlignment="Center" >
                 <TextBox.Text>
-                    <Binding Path="EditFullName"  Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                    <Binding Path="EditFullName" Mode="TwoWay" ValidatesOnDataErrors="True"   UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
-                            <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
+                            <domain:NotEmptyValidationRule ValidationStep="UpdatedValue"/>
                         </Binding.ValidationRules>
+                        
                     </Binding>
                 </TextBox.Text>
             </TextBox>
@@ -346,25 +355,23 @@
                     <Binding Path="EditPhone" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
 
-                            <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
-                            <domain:PhoneNumberValidation ValidatesOnTargetUpdated="True"/>
+                            <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True" ValidationStep="UpdatedValue"/>
+                            <domain:PhoneNumberValidation ValidatesOnTargetUpdated="True" ValidationStep="UpdatedValue"/>
 
                         </Binding.ValidationRules>
                     </Binding>
                 </TextBox.Text>
             </TextBox>
-            <wpfTool:DateTimePicker    Value="{Binding EditDate}" Grid.Row="3" Margin="15,0" VerticalAlignment="Center"/>
-            <ComboBox Style="{StaticResource MaterialDesignFloatingHintComboBox}" ItemsSource="{Binding TbList}" SelectedItem="{Binding EditSelected_Table}" SelectedValue="Num" DisplayMemberPath="Num"  Grid.Row="4" Margin="15,0" materialDesign:HintAssist.Hint="Стол" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4" VerticalAlignment="Center">
+            <wpfTool:DateTimePicker    Value="{Binding EditDate, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Margin="15,0" VerticalAlignment="Center"/>
+            <ComboBox Style="{StaticResource MaterialDesignFloatingHintComboBox}" ItemsSource="{Binding TbList}" SelectedItem="{Binding EditSelected_Table, UpdateSourceTrigger=PropertyChanged}" SelectedValue="Num" DisplayMemberPath="Num"  Grid.Row="4" Margin="15,0" materialDesign:HintAssist.Hint="Стол" materialDesign:HintAssist.IsFloating="True"  materialDesign:HintAssist.HintOpacity="0.4" VerticalAlignment="Center">
                 <ComboBox.Text>
                     <Binding Path="EditTable" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
-                        <Binding.ValidationRules>
-                            <domain:NotEmptyValidationRule ValidatesOnTargetUpdated="True"/>
-                        </Binding.ValidationRules>
+                       
                     </Binding>
                 </ComboBox.Text>
             </ComboBox>
-            <Button Grid.Row="5" HorizontalAlignment="Right" Margin="0,0,15,0" Width="100"  Command="{Binding CloseCommand }">Отмена</Button>
-            <Button Grid.Row="5" HorizontalAlignment="Left" Margin="15,0,0,0" Width="100" Command="{Binding EditBookingCommand}">Сохранить</Button>
+            <Button Grid.Row="5" HorizontalAlignment="Right" Margin="0,0,15,0" MinWidth="100"  Command="{Binding CloseCommand }">Отмена</Button>
+            <Button Grid.Row="5" HorizontalAlignment="Left" Margin="15,0,0,0" MinWidth="100" Command="{Binding EditBookingCommand}">Сохранить</Button>
         </Grid>
 
     </Grid>

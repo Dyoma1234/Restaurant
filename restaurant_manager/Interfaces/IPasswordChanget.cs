@@ -10,6 +10,7 @@ namespace restaurant_manager
     {
         string GetPassword_F();
         string GetPassword_S();
+        void ClearPassword();
 
     }
 }

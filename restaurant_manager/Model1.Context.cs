@@ -32,11 +32,11 @@ namespace restaurant_manager
         public virtual DbSet<Reservation> ReservationSet { get; set; }
         public virtual DbSet<Staff_Pos> Staff_PosSet { get; set; }
         public virtual DbSet<Staff> StaffSet { get; set; }
-        public virtual DbSet<Order_Dishes> Order_DishesSet { get; set; }
         public virtual DbSet<Ready_Dishes> Ready_DishesSet { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Dishes_categories> Dishes_categoriesSet { get; set; }
         public virtual DbSet<Formula> FormulaSet { get; set; }
         public virtual DbSet<Tables> TablesSet { get; set; }
+        public virtual DbSet<Check> CheckSet { get; set; }
     }
 }
