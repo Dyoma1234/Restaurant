@@ -102,7 +102,7 @@ namespace restaurant_manager.ViewModel
                 if (_save_command == null)
                 {
                     _save_command = new DelegateCommand(Save, CanSave);
-
+                    
                 }
                 return _save_command;
             }
